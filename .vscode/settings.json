@@ -1,0 +1,14 @@
+{
+    // Format and import-sort on save
+    "editor.formatOnSave": true,
+    "python.formatting.provider": "black",
+    "python.formatting.blackArgs": ["--line-length", "88"],
+    "python.sortImports.args": ["--profile", "black"],
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    },
+    // pytest discovery
+    "python.testing.pytestEnabled": true,
+    "python.testing.autoTestDiscoverOnSaveEnabled": true
+  }
+  
