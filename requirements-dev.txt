@@ -14,4 +14,4 @@ pytest-django==4.8.0   # handy if you add Django-specific tests later
 
 # CI helpers (optional but nice)
 coverage==7.5.1
-pytest-cov==5.1.0
+pytest-cov==6.1.1
