@@ -15,3 +15,7 @@ pytest-django==4.8.0   # handy if you add Django-specific tests later
 # CI helpers (optional but nice)
 coverage==7.5.1
 pytest-cov==6.1.1
+
+# Documentation
+sphinx==7.3.7           # or latest
+sphinx-rtd-theme==2.0.0 # Read-the-Docs theme
