@@ -5,7 +5,7 @@
     "python.formatting.blackArgs": ["--line-length", "88"],
     "python.sortImports.args": ["--profile", "black"],
     "editor.codeActionsOnSave": {
-      "source.organizeImports": true
+      "source.organizeImports": "explicit"
     },
     // pytest discovery
     "python.testing.pytestEnabled": true,
