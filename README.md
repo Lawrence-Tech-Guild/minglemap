@@ -1,3 +1,4 @@
+![CI](https://github.com/<owner>/minglemap/actions/workflows/ci.yml/badge.svg)
 # MingleMap 🚦
 
 *A community-driven idea for smarter in-person networking.*

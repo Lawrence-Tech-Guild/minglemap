@@ -1,0 +1,19 @@
+# pyproject.toml
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "minglemap"
+version = "0.0.1"
+description = "Smarter, friendlier in-person networking."
+authors = [
+  { name = "YOUR NAME", email = "you@example.com" }
+]
+requires-python = ">=3.10"
+readme = "README.md"
+license = { file = "LICENSE" }
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+packages = ["minglemap"]
