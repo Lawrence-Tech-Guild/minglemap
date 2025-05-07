@@ -44,7 +44,7 @@ Once foundational aspects are proven and privacy concerns well-addressed:
 
 ## Immediate Next Steps
 
-* Open Issue #4 "Roadmap RFC" for community review and discussion.
+* Open a GitHub Discussion "Roadmap RFC" for community review and discussion.
 * Schedule initial feedback session via Slack.
 * Pilot Phase 1 at an upcoming event to test and validate the concept.
 
