@@ -1,4 +1,4 @@
-# pyproject.toml
+# pyproject.toml 
 [build-system]
 requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
@@ -8,7 +8,7 @@ name = "minglemap"
 version = "0.0.1"
 description = "Smarter, friendlier in-person networking."
 authors = [
-  { name = "YOUR NAME", email = "you@example.com" }
+  { name = "Ted Kihm", email = "ted@euphemystic.com" }
 ]
 requires-python = ">=3.10"
 readme = "README.md"
@@ -17,3 +17,10 @@ license = { file = "LICENSE" }
 [tool.setuptools]
 package-dir = { "" = "src" }
 packages = ["minglemap"]
+
+# ——— Add this CLI entry-point ———
+[project.scripts]
+minglemap = "minglemap.__main__:main"
+
+[project.optional-dependencies]
+dev = ["pytest", "pre-commit"]

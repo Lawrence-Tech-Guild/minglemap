@@ -25,14 +25,28 @@ Want to help? Skip to **"Contributing"** below.
 
 ---
 
-## Quick Start (when code exists)
+## Quick Start
+
+Get a working copy of the MingleMap CLI and “runserver” stub on your local machine:
 
 ```bash
-pip install minglemap
-minglemap runserver
-```
+# 1. Clone the repo
+git clone https://github.com/Lawrence-Tech-Guild/minglemap.git
+cd minglemap
 
-*(This section will be updated with real instructions once a prototype is available.)*
+# 2. Create & activate a virtual environment
+python3 -m venv .venv
+source .venv/bin/activate       # on Windows: .venv\Scripts\activate
+
+# 3. Install the package in editable mode with dev tools
+pip install -e .[dev]
+
+# 4. Run the stub CLI
+minglemap
+# → 🎉 MingleMap prototype running – hello from your local machine!
+
+# (Or run the “server” alias:)
+minglemap runserver
 
 ---
 
