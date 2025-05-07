@@ -1,4 +1,4 @@
-![CI](https://github.com/<owner>/minglemap/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/Lawrence-Tech-Guild/minglemap/actions/workflows/ci.yml/badge.svg)
 
 > 🍺 **Community Draft • Lawrence Tech Guild**  
 > First discussion: **21 May 2025 (beer meetup)**.  
