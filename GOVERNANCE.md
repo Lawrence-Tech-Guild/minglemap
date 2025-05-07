@@ -2,23 +2,35 @@
 
 ## Current Status
 
-MingleMap is currently in a **Community Draft** phase, incubated within the **Lawrence Tech Guild (LTG)** community. Formal governance processes have not yet been established, and decisions are presently made informally via discussion and consensus among active participants.
+MingleMap is in **Community Draft** phase, incubated within the **Lawrence Tech Guild (LTG)** community. While formal governance is still emerging, we have adopted an **interim structure** to guide contributions and decision‑making until a full model is ratified.
 
-## Decision-Making Process
+## Provisional Maintainers (through 1 June 2025)
 
-* **Current approach:** Community discussions and rough consensus via the LTG Slack channel (`#minglemap`) and in-person meetups.
-* **Initial coordinator:** \[Your Name] (GitHub: \[your GitHub handle]) is coordinating initial setup and discussions.
+| Role                    | Name                                                                       | GitHub                         |
+| ----------------------- | -------------------------------------------------------------------------- | ------------------------------ |
+| Interim Coordinator     | **Ted Kihm**                                                               | @tkihm                         |
+| Provisional Maintainers | Self‑nominated contributors in `#minglemap` Slack prior to **1 June 2025** | *(to be listed in CODEOWNERS)* |
+
+> After 1 June 2025 the maintainer roster will be confirmed and published in `CODEOWNERS`.
+
+## Decision‑Making
+
+* **Lazy consensus** – Any pull request or proposal is accepted if **no objections are raised within 72 hours**.
+* A single **–1** vote from any maintainer pauses the merge and returns the item to discussion. Consensus—or a simple majority of maintainers—can overturn the –1 after concerns are addressed.
+
+## Review Cadence
+
+* **Weekly triage** – Every Monday, maintainers label new issues/PRs, tag `good first issue`, and assign owners.
+* **Monthly roadmap review** – Conducted asynchronously in the `#minglemap` Slack channel during the first week of each month (with an optional video call) to assess milestones, blockers, and governance tweaks.
 
 ## Future Governance
 
-Governance structure, including project maintainers and formal decision-making processes, will be discussed during the **May 21, 2025 LTG Meetup**. Following community discussion and feedback, an appropriate governance model will be adopted, documented, and implemented.
+A permanent governance model will be proposed at the **LTG meetup on 21 May 2025**, with a formal vote to be conducted asynchronously in the `#minglemap` Slack channel during the following week. Community feedback during the draft phase will continue to inform maintainer eligibility, voting mechanics, and term limits.
 
 ## Getting Involved
 
-Join the Slack workspace and the `#minglemap` channel to participate in discussions and shape the future governance and direction of the MingleMap project. Details can be found in the [COMMUNITY.md](./COMMUNITY.md) file.
-
-We welcome your ideas, contributions, and feedback!
+Join the Slack workspace and the `#minglemap` channel to discuss, contribute code or documentation, and help shape the project. Details are in [COMMUNITY.md](./COMMUNITY.md).
 
 ---
 
-This document will be updated following the community discussions on May 21, 2025.
+*Last updated — 7 May 2025*
