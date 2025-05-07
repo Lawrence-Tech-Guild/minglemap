@@ -42,25 +42,31 @@ The sections below explain how to set up your environment, follow our style rule
 | **Private Slack workspace**                               | Real‑time chat, quick help, informal Q\&A. Ask an admin for an invite. |
 | **[conduct@minglemap.org](mailto:conduct@minglemap.org)** | Private or sensitive conduct concerns (CoC).                           |
 
-## Local Development Setup
+## Local Development
 
-> Tested on macOS / Linux. Windows users can follow the same steps in *PowerShell*.
+> Tested on macOS/Linux. Windows PowerShell users can follow the same steps.
 
 ```bash
-# 1. Fork + clone
-git clone https://github.com/<your-username>/minglemap.git
+# 1. Fork & clone
+git clone https://github.com/Lawrence-Tech-Guild/minglemap.git
 cd minglemap
 
-# 2. Create Python virtual environment (require ≥3.10)
-python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\\Scripts\\activate
+# 2. Create & activate a virtual environment (Python ≥3.10)
+python3 -m venv .venv
+# macOS/Linux
+source .venv/bin/activate
+# Windows PowerShell
+# .\.venv\Scripts\Activate.ps1
 
-# 3. Install dev requirements
-pip install -r requirements-dev.txt
+# 3. Install the package in editable mode with dev tools
+pip install -e '.[dev]'
 
-# 4. Install pre-commit hooks (auto-format & lint)
+# 4. Install & enable pre-commit hooks
 pre-commit install
 
-# 5. Run the test suite to verify everything is green
-pytest
-```
+# 5. Run linters & formatters (as in CI)
+pre-commit run --all-files
+
+# 6. Run the test suite (as in CI)
+pytest --maxfail=1 --disable-warnings -q
+
