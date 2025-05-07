@@ -52,7 +52,7 @@ git clone https://github.com/Lawrence-Tech-Guild/minglemap.git
 cd minglemap
 
 # 2. Create & activate a virtual environment (Python ≥3.10)
-python3 -m venv .venv
+py -3 -m venv .venv  # or: python -m venv .venv
 # macOS/Linux
 source .venv/bin/activate
 # Windows PowerShell
