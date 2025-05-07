@@ -8,7 +8,7 @@ MingleMap is in **Community Draft** phase, incubated within the **Lawrence Tech 
 
 | Role                    | Name                                                                       | GitHub                         |
 | ----------------------- | -------------------------------------------------------------------------- | ------------------------------ |
-| Interim Coordinator     | **Ted Kihm**                                                               | @tkihm / @Euphemystic-AI       |
+| Interim Coordinator     | **Ted Kihm**                                                               | @Euphemystic-AI                |
 | Provisional Maintainers | Self‑nominated contributors in `#minglemap` Slack prior to **1 June 2025** | *(to be listed in CODEOWNERS)* |
 
 > After 1 June 2025 the maintainer roster will be confirmed and published in `CODEOWNERS`.
