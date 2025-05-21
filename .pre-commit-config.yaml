@@ -1,21 +1,6 @@
 repos:
-  # 1️⃣  Code formatter (Black)
-  - repo: https://github.com/psf/black
-    rev: 24.4.0
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.11.10
     hooks:
-      - id: black
-        # Match Black’s default line length
-        args: [--line-length=88]
-
-  # 2️⃣  Import sorter (isort)
-  - repo: https://github.com/pycqa/isort
-    rev: 5.13.2
-    hooks:
-      - id: isort
-        args: ["--profile", "black"]
-
-  # 3️⃣  Linter (flake8)
-  - repo: https://github.com/pycqa/flake8
-    rev: 7.0.0
-    hooks:
-      - id: flake8
+      - id: ruff
+      - id: ruff-format
