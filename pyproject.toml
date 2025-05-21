@@ -1,26 +1,34 @@
-# pyproject.toml 
-[build-system]
-requires = ["setuptools>=68", "wheel"]
-build-backend = "setuptools.build_meta"
-
 [project]
 name = "minglemap"
-version = "0.0.1"
-description = "Smarter, friendlier in-person networking."
-authors = [
-  { name = "Ted Kihm", email = "ted@euphemystic.com" }
+version = "0.1.0"
+description = "MingleMap – Django + Channels + PostGIS"
+
+[tool.ruff]
+target-version = "py312"          # match the Python you use in Docker
+line-length = 88
+src = ["minglemap", "apps"]       # adjust if your code lives elsewhere
+exclude = [
+  ".venv",
+  "venv",
+  "migrations",
+  "static",
 ]
-requires-python = ">=3.10"
-readme = "README.md"
-license = { file = "LICENSE" }
+extend-select = [
+  # Everything you used to get from Flake8 + Black + isort
+  "E",   # pycodestyle errors
+  "F",   # pyflakes
+  "B",   # bugbear
+  "I",   # isort-style import order
+  "UP",  # pyupgrade
+  "C4",  # comprehensions
+  "N",   # pep8-naming
+  "Q",   # quote consistency
+]
+# Auto-fix on save is handled by your editor/pre-commit; keep this explicit.
+fix = true
 
-[tool.setuptools]
-package-dir = { "" = "src" }
-packages = ["minglemap"]
-
-# ——— Add this CLI entry-point ———
-[project.scripts]
-minglemap = "minglemap.__main__:main"
-
-[project.optional-dependencies]
-dev = ["pytest", "pre-commit"]
+[tool.ruff.format]
+# Ruff-format replaces Black
+line-length = 88
+quote-style = "preserve"  # keep whatever quoting style is already there
+indent-style = "space"

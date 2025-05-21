@@ -1,0 +1,58 @@
+version: "3.9"
+
+services:
+  # ───────────── Database (PostGIS) ─────────────
+  db:
+    image: postgis/postgis:16-3.4          # Postgres 16 + PostGIS 3.4
+    environment:
+      POSTGRES_DB: minglemap
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      # Optional: auto-enable the PostGIS extension on first boot
+      # - ./docker/db-init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ───────────── Redis (for Channels) ─────────────
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - redis_data:/data
+
+  # ───────────── Django / Daphne ─────────────
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile                # or replace with an image if you don’t need a custom build
+    command: >
+      sh -c "
+        python manage.py migrate &&
+        python manage.py collectstatic --noinput &&
+        daphne -b 0.0.0.0 -p 8000 minglemap.asgi:application
+      "
+    volumes:
+      - .:/app                              # live reload on host edits
+    environment:
+      # Django settings
+      DJANGO_SETTINGS_MODULE: minglemap.settings
+      DEBUG: "1"
+      # Database & cache
+      DATABASE_URL: postgres://postgres:postgres@db:5432/minglemap
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+volumes:
+  postgres_data:
+  redis_data:
