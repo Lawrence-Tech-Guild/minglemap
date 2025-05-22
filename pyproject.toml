@@ -47,7 +47,6 @@ extend-select = [
   "N",   # pep8-naming
   "Q",   # quote consistency
 ]
-fix = true                       # auto-fix by default
 
 [tool.ruff.format]
 # Ruff-format replaces Black
