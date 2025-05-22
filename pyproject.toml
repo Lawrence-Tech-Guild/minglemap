@@ -29,6 +29,7 @@ typecheck = [
 target-version = "py312"          # match the Python you use in Docker
 line-length = 88
 src = ["minglemap", "apps"]       # adjust if your code lives elsewhere
+[tool.ruff.lint]
 exclude = [
   ".venv",
   "venv",
