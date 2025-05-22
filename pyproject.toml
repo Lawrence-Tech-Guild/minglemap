@@ -3,6 +3,28 @@ name = "minglemap"
 version = "0.1.0"
 description = "MingleMap – Django + Channels + PostGIS"
 
+# ── ►  Runtime requirements ◄ ──
+dependencies = [
+  "django~=5.0",
+  "daphne~=4.1",           # ASGI server for Channels
+  "channels~=4.0",
+  "channels-redis~=4.2",   # channel layer backed by Redis
+  "psycopg[binary]~=3.1",  # Postgres driver
+  "pillow~=10.0",          # image/file uploads (optional but common)
+  "whitenoise~=6.6",       # static-file serving in prod
+]
+
+# ── ►  Optional “extras” for contributors ◄ ──
+[project.optional-dependencies]
+test = [
+  "pytest~=8.2",
+  "pytest-django~=4.8",
+]
+typecheck = [
+  "mypy~=1.10",
+]
+
+# ── Ruff configuration ──
 [tool.ruff]
 target-version = "py312"          # match the Python you use in Docker
 line-length = 88
@@ -24,11 +46,9 @@ extend-select = [
   "N",   # pep8-naming
   "Q",   # quote consistency
 ]
-# Auto-fix on save is handled by your editor/pre-commit; keep this explicit.
-fix = true
+fix = true                       # auto-fix by default
 
 [tool.ruff.format]
 # Ruff-format replaces Black
-line-length = 88
-quote-style = "preserve"  # keep whatever quoting style is already there
+quote-style = "preserve"         # keep existing quoting
 indent-style = "space"
