@@ -15,6 +15,8 @@
 
 ## Why MingleMap?
 
+![Radar-style preview of MingleMap showing nearby attendees](docs/images/minglemap_preview.png)
+
 MingleMap aims to transform how tech workers in Lawrence, Kansas (and beyond) connect at social and professional events. We want to remove the awkwardness of traditional name tags and foster authentic interactions by using smart technology and thoughtful design.
 
 ---
