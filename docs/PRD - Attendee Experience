@@ -1,0 +1,49 @@
+PRD: MingleMap native mobile app (Attendee Experience)
+
+Objective
+Enable seamless, purposeful, and delightful networking at in-person events by connecting attendees based on goals, skills, and real-time availability, while prioritizing privacy and user control.
+
+Key Features
+
+1. Onboarding & Profile Creation
+   a. Sign in with LinkedIn (import avatar, job titles, employers, skills).
+   b. Review/edit imported data, framed as “How can you help others?” and user chooses which Skills and Job/Employer Titles are visible to attendees.    
+   c. User sets their visible “Job status”, eg: “I’m hiring / My company is hiring / I’m actively job-seeking / I’m not job seeking / I might consider other opportunities” (exact wording TBD) 
+   d. Set 3-year career goal (public/private toggle).
+
+2. Event Registration & Goal Setting
+   a. Register for event
+   b. Prompt: “What would you like to achieve at this event?” (show some AI-suggested goals they can select).
+   c. AI matches attendee goals with other attendees’ skills (maybe it auto-updates if new matched people register after you do).
+   d. Navigation Consistency: Ensure that the transition between onboarding, event registration, and networking features is seamless to prevent user confusion.
+   e. Large Event Handling: Ensure the system can efficiently manage and suggest connections in events with a high number of attendees.
+
+3. Personalized Connection Checklist
+   a. Receive a curated list (3–5) of suggested attendees to meet.
+   b. Each suggestion includes:
+      i. Profile snapshot (photo, name, company, skills)
+      ii. Shared interests/goals
+      iii. AI-generated ice-breaker topics
+   c. Checklist UI for marking connections as “met” and option to "Remind me to follow up"
+
+4. Real-Time Attendee Status
+   a. Automatic status: “Available” shown if no one is within 4 feet, “Busy” if someone is within 4 feet.
+   b. Manual override: “Do not disturb” (user sets status, overrides auto).
+   c. Status shown as colored dot on attendee avatars.
+
+5. Request to Talk + Visual Signal
+   a. Tap “Request to Talk” on attendee’s profile.
+   b. If accepted, both phones display matching, brightly colored image so they can  hold their phones high to find each other visually (as well as on the map).
+   c. Option to decline or set “Do not disturb.”
+
+6. Post-Event Follow-Up
+   a. In-app notifcation or email reminder with checklist of people met.
+   b. Quick links to attendee LinkedIn profiles for follow-up.
+   c. In the app, a running filterable list of all the people you met (and maybe ones you didn’t meet too?)
+
+7. Privacy & Accessibility
+   a. Clear privacy controls for all data.
+   b. Manual status override at any time.
+   c. No audio recording (though possibly voice detection to know when someone is Busy talking?)
+
+Visually, create a modern-looking native mobile app UI that follows Apple iOS usability guidelines. It should convey a feeling of the energy potential of meeting new people and making new connections, while still looking trustworthy and professional so users feel their data and privacy is safe. 
