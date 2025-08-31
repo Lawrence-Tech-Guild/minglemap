@@ -1,0 +1,28 @@
+{
+  "colors": {
+    "primary": "#000000",
+    "secondary": "#ffffff"
+  },
+  "spacing": {
+    "1": "4px",
+    "2": "8px",
+    "3": "12px"
+  },
+  "radius": {
+    "none": "0px",
+    "sm": "4px",
+    "md": "8px"
+  },
+  "typography": {
+    "fontFamily": {
+      "sans": ["Inter", "sans-serif"],
+      "serif": ["Georgia", "serif"],
+      "mono": ["Menlo", "monospace"]
+    },
+    "fontSize": {
+      "base": ["16px", "24px"],
+      "lg": ["18px", "28px"],
+      "xl": ["20px", "32px"]
+    }
+  }
+}
