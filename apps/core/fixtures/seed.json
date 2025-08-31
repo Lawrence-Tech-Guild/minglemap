@@ -1,0 +1,392 @@
+[
+  {
+    "model": "core.event",
+    "pk": 1,
+    "fields": {
+      "title": "Community Tech Meetup",
+      "starts_at": "2024-09-15T18:00:00Z",
+      "ends_at": "2024-09-15T20:00:00Z",
+      "location": "Community Hall"
+    }
+  },
+  {
+    "model": "core.profile",
+    "pk": 1,
+    "fields": {
+      "name": "Alice Johnson",
+      "company": "TechCorp",
+      "bio": "Backend developer",
+      "interests": "Python, APIs, Open Source",
+      "consent_level": "full"
+    }
+  },
+  {
+    "model": "core.profile",
+    "pk": 2,
+    "fields": {
+      "name": "Bob Smith",
+      "company": "InnovateX",
+      "bio": "Cloud engineer",
+      "interests": "Cloud Computing, DevOps, Open Source",
+      "consent_level": "full"
+    }
+  },
+  {
+    "model": "core.profile",
+    "pk": 3,
+    "fields": {
+      "name": "Carol Williams",
+      "company": "DataWorks",
+      "bio": "Data scientist",
+      "interests": "Data Science, Machine Learning, Python",
+      "consent_level": "full"
+    }
+  },
+  {
+    "model": "core.profile",
+    "pk": 4,
+    "fields": {
+      "name": "David Brown",
+      "company": "Webify",
+      "bio": "Frontend expert",
+      "interests": "Web Development, JavaScript, UX",
+      "consent_level": "full"
+    }
+  },
+  {
+    "model": "core.profile",
+    "pk": 5,
+    "fields": {
+      "name": "Emma Davis",
+      "company": "RoboticsHub",
+      "bio": "Robotics enthusiast",
+      "interests": "AI, Robotics, Startups",
+      "consent_level": "full"
+    }
+  },
+  {
+    "model": "core.profile",
+    "pk": 6,
+    "fields": {
+      "name": "Frank Miller",
+      "company": "SecureNet",
+      "bio": "Security specialist",
+      "interests": "Cybersecurity, Networking, Linux",
+      "consent_level": "full"
+    }
+  },
+  {
+    "model": "core.profile",
+    "pk": 7,
+    "fields": {
+      "name": "Grace Wilson",
+      "company": "DesignPro",
+      "bio": "UX designer",
+      "interests": "UX Design, Accessibility, Web Development",
+      "consent_level": "full"
+    }
+  },
+  {
+    "model": "core.profile",
+    "pk": 8,
+    "fields": {
+      "name": "Henry Moore",
+      "company": "IoT Inc.",
+      "bio": "Hardware tinkerer",
+      "interests": "IoT, Hardware, Open Source",
+      "consent_level": "full"
+    }
+  },
+  {
+    "model": "core.profile",
+    "pk": 9,
+    "fields": {
+      "name": "Ivy Taylor",
+      "company": "AutomationWorks",
+      "bio": "Automation engineer",
+      "interests": "DevOps, Automation, CI/CD",
+      "consent_level": "full"
+    }
+  },
+  {
+    "model": "core.profile",
+    "pk": 10,
+    "fields": {
+      "name": "Jack Anderson",
+      "company": "MobileMakers",
+      "bio": "Mobile developer",
+      "interests": "Mobile Development, Swift, Kotlin",
+      "consent_level": "full"
+    }
+  },
+  {
+    "model": "core.profile",
+    "pk": 11,
+    "fields": {
+      "name": "Karen Thomas",
+      "company": "Analytica",
+      "bio": "Data analyst",
+      "interests": "Data Analysis, Python, Visualization",
+      "consent_level": "full"
+    }
+  },
+  {
+    "model": "core.profile",
+    "pk": 12,
+    "fields": {
+      "name": "Leo Martin",
+      "company": "AI Labs",
+      "bio": "AI researcher",
+      "interests": "AI, Data Science, Python",
+      "consent_level": "full"
+    }
+  },
+  {
+    "model": "core.profile",
+    "pk": 13,
+    "fields": {
+      "name": "Mia Lee",
+      "company": "Productive",
+      "bio": "Product manager",
+      "interests": "Product Management, Startups, Agile",
+      "consent_level": "full"
+    }
+  },
+  {
+    "model": "core.profile",
+    "pk": 14,
+    "fields": {
+      "name": "Noah Perez",
+      "company": "DB Experts",
+      "bio": "Database guru",
+      "interests": "Backend Development, Databases, Python",
+      "consent_level": "full"
+    }
+  },
+  {
+    "model": "core.profile",
+    "pk": 15,
+    "fields": {
+      "name": "Olivia White",
+      "company": "MarketMax",
+      "bio": "Marketing analyst",
+      "interests": "Marketing, Analytics, SEO",
+      "consent_level": "full"
+    }
+  },
+  {
+    "model": "core.profile",
+    "pk": 16,
+    "fields": {
+      "name": "Paul Harris",
+      "company": "CloudNine",
+      "bio": "Cloud architect",
+      "interests": "Cloud Infrastructure, Kubernetes, Go",
+      "consent_level": "full"
+    }
+  },
+  {
+    "model": "core.profile",
+    "pk": 17,
+    "fields": {
+      "name": "Quinn Walker",
+      "company": "EthicalAI",
+      "bio": "ML engineer",
+      "interests": "Machine Learning, AI Ethics, Open Source",
+      "consent_level": "full"
+    }
+  },
+  {
+    "model": "core.profile",
+    "pk": 18,
+    "fields": {
+      "name": "Ruby Young",
+      "company": "Reactify",
+      "bio": "Frontend developer",
+      "interests": "Frontend, React, Design Systems",
+      "consent_level": "full"
+    }
+  },
+  {
+    "model": "core.profile",
+    "pk": 19,
+    "fields": {
+      "name": "Sam King",
+      "company": "SecureDev",
+      "bio": "DevSecOps specialist",
+      "interests": "Security, DevSecOps, Compliance",
+      "consent_level": "full"
+    }
+  },
+  {
+    "model": "core.profile",
+    "pk": 20,
+    "fields": {
+      "name": "Tina Scott",
+      "company": "GameStudio",
+      "bio": "Game developer",
+      "interests": "Game Development, Unity, C#",
+      "consent_level": "full"
+    }
+  },
+  {
+    "model": "core.attendance",
+    "pk": 1,
+    "fields": {
+      "event": 1,
+      "profile": 1
+    }
+  },
+  {
+    "model": "core.attendance",
+    "pk": 2,
+    "fields": {
+      "event": 1,
+      "profile": 2
+    }
+  },
+  {
+    "model": "core.attendance",
+    "pk": 3,
+    "fields": {
+      "event": 1,
+      "profile": 3
+    }
+  },
+  {
+    "model": "core.attendance",
+    "pk": 4,
+    "fields": {
+      "event": 1,
+      "profile": 4
+    }
+  },
+  {
+    "model": "core.attendance",
+    "pk": 5,
+    "fields": {
+      "event": 1,
+      "profile": 5
+    }
+  },
+  {
+    "model": "core.attendance",
+    "pk": 6,
+    "fields": {
+      "event": 1,
+      "profile": 6
+    }
+  },
+  {
+    "model": "core.attendance",
+    "pk": 7,
+    "fields": {
+      "event": 1,
+      "profile": 7
+    }
+  },
+  {
+    "model": "core.attendance",
+    "pk": 8,
+    "fields": {
+      "event": 1,
+      "profile": 8
+    }
+  },
+  {
+    "model": "core.attendance",
+    "pk": 9,
+    "fields": {
+      "event": 1,
+      "profile": 9
+    }
+  },
+  {
+    "model": "core.attendance",
+    "pk": 10,
+    "fields": {
+      "event": 1,
+      "profile": 10
+    }
+  },
+  {
+    "model": "core.attendance",
+    "pk": 11,
+    "fields": {
+      "event": 1,
+      "profile": 11
+    }
+  },
+  {
+    "model": "core.attendance",
+    "pk": 12,
+    "fields": {
+      "event": 1,
+      "profile": 12
+    }
+  },
+  {
+    "model": "core.attendance",
+    "pk": 13,
+    "fields": {
+      "event": 1,
+      "profile": 13
+    }
+  },
+  {
+    "model": "core.attendance",
+    "pk": 14,
+    "fields": {
+      "event": 1,
+      "profile": 14
+    }
+  },
+  {
+    "model": "core.attendance",
+    "pk": 15,
+    "fields": {
+      "event": 1,
+      "profile": 15
+    }
+  },
+  {
+    "model": "core.attendance",
+    "pk": 16,
+    "fields": {
+      "event": 1,
+      "profile": 16
+    }
+  },
+  {
+    "model": "core.attendance",
+    "pk": 17,
+    "fields": {
+      "event": 1,
+      "profile": 17
+    }
+  },
+  {
+    "model": "core.attendance",
+    "pk": 18,
+    "fields": {
+      "event": 1,
+      "profile": 18
+    }
+  },
+  {
+    "model": "core.attendance",
+    "pk": 19,
+    "fields": {
+      "event": 1,
+      "profile": 19
+    }
+  },
+  {
+    "model": "core.attendance",
+    "pk": 20,
+    "fields": {
+      "event": 1,
+      "profile": 20
+    }
+  }
+]
