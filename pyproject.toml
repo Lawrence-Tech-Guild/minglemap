@@ -12,6 +12,7 @@ dependencies = [
   "psycopg[binary]~=3.1",  # Postgres driver
   "pillow~=10.0",          # image/file uploads (optional but common)
   "whitenoise~=6.6",       # static-file serving in prod
+  "djangorestframework~=3.15",  # REST API framework
 ]
 
 # ── ►  Optional “extras” for contributors ◄ ──
