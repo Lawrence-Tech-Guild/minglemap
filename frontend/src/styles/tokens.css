@@ -1,0 +1,19 @@
+:root {
+  --colors-primary: #000000;
+  --colors-secondary: #ffffff;
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --radius-none: 0px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --typography-fontFamily-sans: Inter, sans-serif;
+  --typography-fontFamily-serif: Georgia, serif;
+  --typography-fontFamily-mono: Menlo, monospace;
+  --typography-fontSize-base: 16px;
+  --typography-fontSize-base-line-height: 24px;
+  --typography-fontSize-lg: 18px;
+  --typography-fontSize-lg-line-height: 28px;
+  --typography-fontSize-xl: 20px;
+  --typography-fontSize-xl-line-height: 32px;
+}
