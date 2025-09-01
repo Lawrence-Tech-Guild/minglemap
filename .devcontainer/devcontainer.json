@@ -1,0 +1,30 @@
+{
+  "name": "MingleMap (web)",
+  "dockerComposeFile": ["../docker-compose.yml", "compose.dev.yml"],
+  "service": "web",
+  "workspaceFolder": "/app",
+  "overrideCommand": true,
+  "postCreateCommand": "pip install -e .[dev] || (test -f requirements-dev.txt && pip install -r requirements-dev.txt) || (test -f requirements.txt && pip install -r requirements.txt) || true",
+  "remoteUser": "root",
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers/features/node:1": { "version": "20" }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "charliermarsh.ruff",
+        "ms-azuretools.vscode-docker",
+        "ms-vscode.vscode-typescript-next"
+      ]
+    }
+  },
+  "forwardPorts": [8000, 5173],
+  "portsAttributes": {
+    "8000": { "label": "Django (dev)" },
+    "5173": { "label": "Vite (frontend)" }
+  }
+}

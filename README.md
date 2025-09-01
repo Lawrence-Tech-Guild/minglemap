@@ -92,6 +92,14 @@ minglemap                 # CLI hello world
 minglemap runserver       # Django dev server (auto‑reload)
 ```
 
+## Developing in VS Code Dev Containers
+
+1. Install Docker Desktop and VS Code with the Dev Containers and Docker extensions.
+2. Open the repo in VS Code, then run “Dev Containers: Reopen in Container”.
+3. Backend will be available at http://localhost:8000.
+4. If the `frontend` directory exists, the Vite dev server will be at http://localhost:5173 (either started via the override or manually with `cd frontend && npm install && npm run dev` inside the container).
+5. Useful commands: `docker compose up -d`, `docker compose logs -f`, `docker compose down -v`.
+
 ---
 
 ## About Lawrence Tech Guild
