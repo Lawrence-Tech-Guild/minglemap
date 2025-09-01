@@ -3,7 +3,8 @@
   "dockerComposeFile": ["../docker-compose.yml", "compose.dev.yml"],
   "service": "web",
   "workspaceFolder": "/app",
-  "overrideCommand": true,
+  "workspaceMount": "source=${localWorkspaceFolder},target=/app,type=bind,consistency=cached",
+  "overrideCommand": false,
   "postCreateCommand": "pip install -e .[dev] || (test -f requirements-dev.txt && pip install -r requirements-dev.txt) || (test -f requirements.txt && pip install -r requirements.txt) || true",
   "remoteUser": "root",
   "features": {
