@@ -155,9 +155,9 @@ daphne==4.2.0 \
     --hash=sha256:c055de9e685cab7aa369e25e16731baa9b310b9db1a76886dbdde0b4456fb056 \
     --hash=sha256:ccc7a476c498272237e27758a02aff11c76ab777c4e20b9b6c141729db599d5d
     # via minglemap (pyproject.toml)
-django==5.2.1 \
-    --hash=sha256:57fe1f1b59462caed092c80b3dd324fd92161b620d59a9ba9181c34746c97284 \
-    --hash=sha256:a9b680e84f9a0e71da83e399f1e922e1ab37b2173ced046b541c72e1589a5961
+django==5.2.8 \
+    --hash=sha256:23254866a5bb9a2cfa6004e8b809ec6246eba4b58a7589bc2772f1bcc8456c7f \
+    --hash=sha256:37e687f7bd73ddf043e2b6b97cfe02fcbb11f2dbb3adccc6a2b18c6daa054d7f
     # via
     #   channels
     #   minglemap (pyproject.toml)
