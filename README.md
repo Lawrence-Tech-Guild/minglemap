@@ -33,24 +33,30 @@ Want to help? Skip to **Contributing** below.
 
 Choose the setup that suits you. **Option A (Docker)** is the fastest way to get a local instance running in under five minutes. **Option B (Python virtual environment)** is still available for those who prefer a classic dev setup.
 
-### Option A – Docker (recommended)
+> [!NOTE]
+> Assumes you run commands from the repo root and use the default SQLite settings; Docker also starts Postgres/Redis, but Django does not read `DATABASE_URL` yet.
 
-#### Prerequisites
+### Prerequisites
 
-* **Docker Desktop** (Windows 11/macOS) or **Docker Engine 20.10+** with the **Compose plugin** (Linux).
+> [!IMPORTANT]
+> Install the tools needed for the path you choose (Docker Desktop/Engine, or Python 3.10+ with pip).
 
-  * **Windows** – Docker Desktop automatically enables WSL 2 the first time you run it.
-  * **macOS** – Download Docker Desktop from [https://www.docker.com](https://www.docker.com).
-  * **Ubuntu 22.04** –
+- **Git** – to clone the repository.
+- **Docker Desktop** (Windows 11/macOS) or **Docker Engine 20.10+** with the **Compose plugin** (Linux) for the Docker setup.
+- **Python 3.10+** and **pip** for the virtual environment setup.
+- **Node.js 18+** and **npm** only if you plan to run the frontend.
 
-    ```bash
-    sudo apt-get update
-    sudo apt-get install docker.io docker-compose-plugin
-    sudo usermod -aG docker $USER   # log out & back in
-    ```
-* **Git** – to clone the repository.
+Ubuntu 22.04 setup for Docker:
 
-#### Run MingleMap
+```bash
+sudo apt-get update
+sudo apt-get install docker.io docker-compose-plugin
+sudo usermod -aG docker $USER   # log out & back in
+```
+
+### Setup
+
+#### Option A – Docker (recommended)
 
 ```bash
 # 1 – Clone the repo
@@ -60,20 +66,23 @@ cd minglemap
 # 2 – Build and start the stack (first run takes ±2 min)
 docker compose up -d   # -d = detached; skip it if you want to watch logs
 
-# 3 – Open the site
-# Linux/WSL/macOS: http://localhost:8000
-# Windows (WSL 2 paths work out of the box): http://localhost:8000
+# 3 – Tail logs (optional)
+docker compose logs -f web
 ```
 
-**Stop the stack**
+Open http://localhost:8000/api/ once the web container is healthy.
+
+> [!CAUTION]
+> `docker compose down -v` removes database and Redis volumes and deletes local data.
 
 ```bash
-docker compose down   # add -v to drop database/redis volumes
+docker compose down
+# docker compose down -v
 ```
 
 **Live reload** – Source code is bind‑mounted, so any change you make on the host triggers Django’s auto‑reload in the running container.
 
-### Option B – Python virtual environment (advanced)
+#### Option B – Python virtual environment (advanced)
 
 ```bash
 # 1 – Clone the repo
@@ -87,10 +96,48 @@ source .venv/bin/activate       # Windows: .venv\Scripts\activate
 # 3 – Install package in editable mode with dev tools
 pip install -e .[dev]
 
-# 4 – Run the stub CLI or Django server
-minglemap                 # CLI hello world
-minglemap runserver       # Django dev server (auto‑reload)
+# 4 – Apply migrations and run the Django dev server
+python manage.py migrate
+python manage.py runserver
 ```
+
+Use `python manage.py ...` for Django commands; the `minglemap` console script is a stub.
+
+#### Frontend (optional)
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+### Verification
+
+#### Docker
+
+```bash
+docker compose ps
+docker compose exec web python manage.py check
+curl -I http://localhost:8000/api/
+```
+
+Expect the web container to be healthy and the API route to return a 200.
+
+#### Python virtual environment
+
+```bash
+python manage.py check
+pytest
+```
+
+With `python manage.py runserver` running, visit http://localhost:8000/api/ and confirm you see the API root.
+
+### Troubleshooting
+
+- `docker compose` cannot connect to the daemon: start Docker Desktop or run `sudo systemctl start docker` (Linux).
+- Port 8000 is already in use: stop the other process or run `python manage.py runserver 8001` and browse http://localhost:8001/api/.
+- `ModuleNotFoundError: django` or `pytest: command not found`: activate the venv and run `pip install -e .[dev]`.
+- Frontend fails to start: confirm Node 18+ with `node -v`, then reinstall dependencies with `npm install`.
 
 ## Developing in VS Code Dev Containers
 
@@ -98,7 +145,11 @@ minglemap runserver       # Django dev server (auto‑reload)
 2. Open the repo in VS Code, then run “Dev Containers: Reopen in Container”.
 3. Backend will be available at http://localhost:8000.
 4. If the `frontend` directory exists, the Vite dev server will be at http://localhost:5173 (either started via the override or manually with `cd frontend && npm install && npm run dev` inside the container).
-5. Useful commands: `docker compose up -d`, `docker compose logs -f`, `docker compose down -v`.
+
+> [!CAUTION]
+> `docker compose down -v` removes database and Redis volumes and deletes local data.
+
+Useful commands: `docker compose up -d`, `docker compose logs -f`, `docker compose down -v`.
 
 ---
 
