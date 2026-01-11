@@ -176,3 +176,4 @@ cython_debug/
 # Frontend artifacts
 frontend/node_modules/
 frontend/dist/
+ROADMAP.docx
