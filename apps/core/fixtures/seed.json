@@ -16,8 +16,7 @@
       "name": "Alice Johnson",
       "company": "TechCorp",
       "bio": "Backend developer",
-      "interests": "Python, APIs, Open Source",
-      "consent_level": "full"
+      "interests": "Python, APIs, Open Source"
     }
   },
   {
@@ -27,8 +26,7 @@
       "name": "Bob Smith",
       "company": "InnovateX",
       "bio": "Cloud engineer",
-      "interests": "Cloud Computing, DevOps, Open Source",
-      "consent_level": "full"
+      "interests": "Cloud Computing, DevOps, Open Source"
     }
   },
   {
@@ -38,8 +36,7 @@
       "name": "Carol Williams",
       "company": "DataWorks",
       "bio": "Data scientist",
-      "interests": "Data Science, Machine Learning, Python",
-      "consent_level": "full"
+      "interests": "Data Science, Machine Learning, Python"
     }
   },
   {
@@ -49,8 +46,7 @@
       "name": "David Brown",
       "company": "Webify",
       "bio": "Frontend expert",
-      "interests": "Web Development, JavaScript, UX",
-      "consent_level": "full"
+      "interests": "Web Development, JavaScript, UX"
     }
   },
   {
@@ -60,8 +56,7 @@
       "name": "Emma Davis",
       "company": "RoboticsHub",
       "bio": "Robotics enthusiast",
-      "interests": "AI, Robotics, Startups",
-      "consent_level": "full"
+      "interests": "AI, Robotics, Startups"
     }
   },
   {
@@ -71,8 +66,7 @@
       "name": "Frank Miller",
       "company": "SecureNet",
       "bio": "Security specialist",
-      "interests": "Cybersecurity, Networking, Linux",
-      "consent_level": "full"
+      "interests": "Cybersecurity, Networking, Linux"
     }
   },
   {
@@ -82,8 +76,7 @@
       "name": "Grace Wilson",
       "company": "DesignPro",
       "bio": "UX designer",
-      "interests": "UX Design, Accessibility, Web Development",
-      "consent_level": "full"
+      "interests": "UX Design, Accessibility, Web Development"
     }
   },
   {
@@ -93,8 +86,7 @@
       "name": "Henry Moore",
       "company": "IoT Inc.",
       "bio": "Hardware tinkerer",
-      "interests": "IoT, Hardware, Open Source",
-      "consent_level": "full"
+      "interests": "IoT, Hardware, Open Source"
     }
   },
   {
@@ -104,8 +96,7 @@
       "name": "Ivy Taylor",
       "company": "AutomationWorks",
       "bio": "Automation engineer",
-      "interests": "DevOps, Automation, CI/CD",
-      "consent_level": "full"
+      "interests": "DevOps, Automation, CI/CD"
     }
   },
   {
@@ -115,8 +106,7 @@
       "name": "Jack Anderson",
       "company": "MobileMakers",
       "bio": "Mobile developer",
-      "interests": "Mobile Development, Swift, Kotlin",
-      "consent_level": "full"
+      "interests": "Mobile Development, Swift, Kotlin"
     }
   },
   {
@@ -126,8 +116,7 @@
       "name": "Karen Thomas",
       "company": "Analytica",
       "bio": "Data analyst",
-      "interests": "Data Analysis, Python, Visualization",
-      "consent_level": "full"
+      "interests": "Data Analysis, Python, Visualization"
     }
   },
   {
@@ -137,8 +126,7 @@
       "name": "Leo Martin",
       "company": "AI Labs",
       "bio": "AI researcher",
-      "interests": "AI, Data Science, Python",
-      "consent_level": "full"
+      "interests": "AI, Data Science, Python"
     }
   },
   {
@@ -148,8 +136,7 @@
       "name": "Mia Lee",
       "company": "Productive",
       "bio": "Product manager",
-      "interests": "Product Management, Startups, Agile",
-      "consent_level": "full"
+      "interests": "Product Management, Startups, Agile"
     }
   },
   {
@@ -159,8 +146,7 @@
       "name": "Noah Perez",
       "company": "DB Experts",
       "bio": "Database guru",
-      "interests": "Backend Development, Databases, Python",
-      "consent_level": "full"
+      "interests": "Backend Development, Databases, Python"
     }
   },
   {
@@ -170,8 +156,7 @@
       "name": "Olivia White",
       "company": "MarketMax",
       "bio": "Marketing analyst",
-      "interests": "Marketing, Analytics, SEO",
-      "consent_level": "full"
+      "interests": "Marketing, Analytics, SEO"
     }
   },
   {
@@ -181,8 +166,7 @@
       "name": "Paul Harris",
       "company": "CloudNine",
       "bio": "Cloud architect",
-      "interests": "Cloud Infrastructure, Kubernetes, Go",
-      "consent_level": "full"
+      "interests": "Cloud Infrastructure, Kubernetes, Go"
     }
   },
   {
@@ -192,8 +176,7 @@
       "name": "Quinn Walker",
       "company": "EthicalAI",
       "bio": "ML engineer",
-      "interests": "Machine Learning, AI Ethics, Open Source",
-      "consent_level": "full"
+      "interests": "Machine Learning, AI Ethics, Open Source"
     }
   },
   {
@@ -203,8 +186,7 @@
       "name": "Ruby Young",
       "company": "Reactify",
       "bio": "Frontend developer",
-      "interests": "Frontend, React, Design Systems",
-      "consent_level": "full"
+      "interests": "Frontend, React, Design Systems"
     }
   },
   {
@@ -214,8 +196,7 @@
       "name": "Sam King",
       "company": "SecureDev",
       "bio": "DevSecOps specialist",
-      "interests": "Security, DevSecOps, Compliance",
-      "consent_level": "full"
+      "interests": "Security, DevSecOps, Compliance"
     }
   },
   {
@@ -225,8 +206,7 @@
       "name": "Tina Scott",
       "company": "GameStudio",
       "bio": "Game developer",
-      "interests": "Game Development, Unity, C#",
-      "consent_level": "full"
+      "interests": "Game Development, Unity, C#"
     }
   },
   {

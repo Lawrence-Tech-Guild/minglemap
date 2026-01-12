@@ -19,18 +19,26 @@ class EventViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
     filter_backends = [ExactMatchFilterBackend]
-    filterset_fields = ["title", "location", "starts_at", "ends_at"]
+    filterset_fields = [
+        "title",
+        "location",
+        "starts_at",
+        "ends_at",
+        "estimated_attendance",
+        "signup_opens_at",
+        "signup_closes_at",
+    ]
 
 
 class ProfileViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
     filter_backends = [ExactMatchFilterBackend]
-    filterset_fields = ["name", "company", "interests", "consent_level"]
+    filterset_fields = ["name", "company", "role", "interests"]
 
 
 class AttendanceViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Attendance.objects.all()
     serializer_class = AttendanceSerializer
     filter_backends = [ExactMatchFilterBackend]
-    filterset_fields = ["event", "profile"]
+    filterset_fields = ["event", "profile", "consent_to_share_profile"]

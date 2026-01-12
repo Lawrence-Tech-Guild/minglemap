@@ -5,8 +5,8 @@
 
 ## Now (Sprint 0 / Sprint 1)
 
-- [ ] Confirm Phase 1 success metrics (usage targets, feedback volume). Draft in `docs/phase1-success-metrics.md`.
-- [ ] Finalize data model for events, attendee profiles, and consent fields.
+- [x] Confirm Phase 1 success metrics (usage targets, feedback volume). Approved in `docs/phase1-success-metrics.md`.
+- [x] Finalize data model for events, attendee profiles, and consent fields.
 - [ ] Draft API contracts for event signup and attendee directory.
 - [ ] Create initial UI wireframes for event signup and browsing.
 - [ ] Define minimal analytics/telemetry plan that honors privacy-first constraints.

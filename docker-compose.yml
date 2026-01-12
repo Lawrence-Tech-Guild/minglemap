@@ -39,6 +39,8 @@ services:
       DATABASE_URL: postgres://postgres:postgres@db:5432/minglemap
       REDIS_HOST: redis
       REDIS_PORT: "6379"
+      # Stop root warnings
+      PIP_ROOT_USER_ACTION: ignore
     ports:
       - "8000:8000"
     depends_on:
