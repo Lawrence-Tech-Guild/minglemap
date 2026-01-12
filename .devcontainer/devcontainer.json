@@ -1,16 +1,21 @@
 {
   "name": "MingleMap (web)",
-  "dockerComposeFile": ["../docker-compose.yml", "compose.dev.yml"],
+  "dockerComposeFile": [
+    "../docker-compose.yml",
+    "compose.dev.yml"
+  ],
   "service": "web",
   "workspaceFolder": "/app",
   "workspaceMount": "source=${localWorkspaceFolder},target=/app,type=bind,consistency=cached",
   "overrideCommand": false,
-  "postCreateCommand": "pip install -e .[dev] || (test -f requirements-dev.txt && pip install -r requirements-dev.txt) || (test -f requirements.txt && pip install -r requirements.txt) || true",
+  "postCreateCommand": "test -f requirements-dev.txt && pip install -r requirements-dev.txt || true",
   "remoteUser": "root",
   "features": {
     "ghcr.io/devcontainers/features/git:1": {},
     "ghcr.io/devcontainers/features/github-cli:1": {},
-    "ghcr.io/devcontainers/features/node:1": { "version": "20" }
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20"
+    }
   },
   "customizations": {
     "vscode": {
@@ -23,9 +28,16 @@
       ]
     }
   },
-  "forwardPorts": [8000, 5173],
+  "forwardPorts": [
+    8000,
+    5173
+  ],
   "portsAttributes": {
-    "8000": { "label": "Django (dev)" },
-    "5173": { "label": "Vite (frontend)" }
+    "8000": {
+      "label": "Django (dev)"
+    },
+    "5173": {
+      "label": "Vite (frontend)"
+    }
   }
 }
