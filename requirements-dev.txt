@@ -18,4 +18,5 @@ pytest-cov==6.1.1
 
 # Documentation
 sphinx==7.3.7           # or latest
+myst-parser==2.0.0      # Markdown support for Sphinx
 sphinx-rtd-theme==2.0.0 # Read-the-Docs theme

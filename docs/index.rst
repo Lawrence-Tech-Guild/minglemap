@@ -15,3 +15,9 @@ documentation for details.
    :maxdepth: 2
    :caption: Contents:
 
+   MingleMap_Application_Ideation
+   MingleMap_Application_Ideation_Privacy_Enhancement
+   api-contracts
+   event-signup-directory-wireframes
+   phase1-success-metrics
+
