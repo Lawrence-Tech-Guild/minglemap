@@ -7,7 +7,7 @@
 
 - [x] Confirm Phase 1 success metrics (usage targets, feedback volume). Approved in `docs/phase1-success-metrics.md`.
 - [x] Finalize data model for events, attendee profiles, and consent fields.
-- [ ] Draft API contracts for event signup and attendee directory.
+- [x] Draft API contracts for event signup and attendee directory in `docs/api-contracts.md`.
 - [ ] Create initial UI wireframes for event signup and browsing.
 - [ ] Define minimal analytics/telemetry plan that honors privacy-first constraints.
 - [ ] Identify seed data needed for demos and tests.

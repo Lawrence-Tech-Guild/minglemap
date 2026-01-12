@@ -19,3 +19,33 @@ class AttendanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Attendance
         fields = "__all__"
+
+
+class ProfileSignupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ["name", "company", "role", "bio", "interests"]
+
+
+class EventSignupSerializer(serializers.Serializer):
+    profile = ProfileSignupSerializer()
+    interest_areas = serializers.CharField(required=False, allow_blank=True, default="")
+    connection_intent = serializers.CharField(
+        required=False, allow_blank=True, default=""
+    )
+    consent_to_share_profile = serializers.BooleanField(required=False, default=False)
+
+
+class DirectoryProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = ["id", "name", "interests"]
+
+
+class DirectoryEntrySerializer(serializers.ModelSerializer):
+    attendance_id = serializers.IntegerField(source="id", read_only=True)
+    profile = DirectoryProfileSerializer(read_only=True)
+
+    class Meta:
+        model = Attendance
+        fields = ["attendance_id", "profile", "connection_intent"]
