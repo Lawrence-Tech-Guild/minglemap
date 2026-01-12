@@ -10,7 +10,9 @@ RUN apt-get update \
 # ---- Python deps ----
 WORKDIR /app
 COPY requirements.txt .
-RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
+# RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip && PIP_REQUIRE_HASHES=0 pip install --no-cache-dir -r requirements.txt
+
 
 # ---- Project code ----
 COPY . /app
