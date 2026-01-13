@@ -10,7 +10,7 @@
 - [x] Draft API contracts for event signup and attendee directory in `docs/api-contracts.md`.
 - [x] Create initial UI wireframes for event signup and browsing in `docs/event-signup-directory-wireframes.md`.
 - [x] Define minimal analytics/telemetry plan that honors privacy-first constraints in `docs/analytics-telemetry-plan.md`.
-- [ ] Identify seed data needed for demos and tests.
+- [x] Identify seed data needed for demos and tests in `docs/seed-data.md`.
 
 ## Next (Sprint 2)
 
