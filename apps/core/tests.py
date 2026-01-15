@@ -31,6 +31,7 @@ def test_attendance_defaults() -> None:
 
     attendance = Attendance.objects.create(event=event, profile=profile)
 
+    assert attendance.visible_in_directory is True
     assert attendance.consent_to_share_profile is False
     assert attendance.consent_to_share_profile_at is None
     assert attendance.interest_areas == ""
@@ -134,6 +135,8 @@ def test_event_signup_rejects_outside_signup_window() -> None:
 
 def test_event_directory_returns_only_consented_attendees() -> None:
     event = create_event()
+    viewer = create_profile()
+    viewer_attendance = Attendance.objects.create(event=event, profile=viewer)
     profile_consented = Profile.objects.create(
         name="Hedy Lamarr",
         interests="wireless",
@@ -154,9 +157,18 @@ def test_event_directory_returns_only_consented_attendees() -> None:
         profile=profile_hidden,
         consent_to_share_profile=False,
     )
+    Attendance.objects.create(
+        event=event,
+        profile=Profile.objects.create(name="Joan Clarke"),
+        consent_to_share_profile=True,
+        consent_to_share_profile_at=timezone.now(),
+        visible_in_directory=False,
+    )
     client = APIClient()
 
-    response = client.get(f"/api/events/{event.id}/directory/")
+    response = client.get(
+        f"/api/events/{event.id}/directory/?attendance_id={viewer_attendance.id}"
+    )
 
     assert response.status_code == 200
     data = response.json()
@@ -168,3 +180,35 @@ def test_event_directory_returns_only_consented_attendees() -> None:
     assert entry["profile"]["name"] == profile_consented.name
     assert entry["profile"]["interests"] == profile_consented.interests
     assert entry["connection_intent"] == attendance_consented.connection_intent
+
+
+def test_event_directory_requires_signup() -> None:
+    event = create_event()
+    client = APIClient()
+
+    response = client.get(f"/api/events/{event.id}/directory/")
+
+    assert response.status_code == 403
+
+
+def test_directory_visibility_toggle_updates_consent_and_visibility() -> None:
+    event = create_event()
+    profile = create_profile()
+    attendance = Attendance.objects.create(event=event, profile=profile)
+    client = APIClient()
+
+    response = client.patch(
+        f"/api/events/{event.id}/directory/visibility/",
+        {
+            "attendance_id": attendance.id,
+            "visible_in_directory": False,
+            "consent_to_share_profile": True,
+        },
+        format="json",
+    )
+
+    assert response.status_code == 200
+    attendance.refresh_from_db()
+    assert attendance.visible_in_directory is False
+    assert attendance.consent_to_share_profile is True
+    assert attendance.consent_to_share_profile_at is not None

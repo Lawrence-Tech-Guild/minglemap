@@ -8,6 +8,7 @@ from .models import Attendance, Event, Profile
 from .serializers import (
     AttendanceSerializer,
     DirectoryEntrySerializer,
+    DirectoryVisibilitySerializer,
     EventSerializer,
     EventSignupSerializer,
     ProfileSerializer,
@@ -90,12 +91,78 @@ class EventViewSet(viewsets.ReadOnlyModelViewSet):
     @action(detail=True, methods=["get"], url_path="directory")
     def directory(self, request, pk=None):
         event = self.get_object()
+        attendance_id = request.query_params.get("attendance_id")
+        if not attendance_id:
+            return Response(
+                {"detail": "Sign up is required to view the directory."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+        try:
+            attendance_id_int = int(attendance_id)
+        except ValueError:
+            return Response(
+                {"detail": "Attendance id must be an integer."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if not Attendance.objects.filter(
+            event=event, id=attendance_id_int
+        ).exists():
+            return Response(
+                {"detail": "Sign up is required to view the directory."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
         attendances = (
-            Attendance.objects.filter(event=event, consent_to_share_profile=True)
+            Attendance.objects.filter(
+                event=event,
+                consent_to_share_profile=True,
+                visible_in_directory=True,
+            )
             .select_related("profile")
             .order_by("id")
         )
         return Response(DirectoryEntrySerializer(attendances, many=True).data)
+
+    @action(detail=True, methods=["patch"], url_path="directory/visibility")
+    def directory_visibility(self, request, pk=None):
+        event = self.get_object()
+        serializer = DirectoryVisibilitySerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        attendance_id = serializer.validated_data["attendance_id"]
+
+        try:
+            attendance = Attendance.objects.get(event=event, id=attendance_id)
+        except Attendance.DoesNotExist:
+            return Response(
+                {"detail": "Attendance not found for this event."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        update_fields = []
+        if "visible_in_directory" in serializer.validated_data:
+            attendance.visible_in_directory = serializer.validated_data[
+                "visible_in_directory"
+            ]
+            update_fields.append("visible_in_directory")
+        if "consent_to_share_profile" in serializer.validated_data:
+            consent_to_share_profile = serializer.validated_data[
+                "consent_to_share_profile"
+            ]
+            attendance.consent_to_share_profile = consent_to_share_profile
+            attendance.consent_to_share_profile_at = (
+                timezone.now() if consent_to_share_profile else None
+            )
+            update_fields.extend(
+                ["consent_to_share_profile", "consent_to_share_profile_at"]
+            )
+
+        if not update_fields:
+            return Response(
+                {"detail": "No visibility updates provided."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        attendance.save(update_fields=update_fields)
+        return Response(AttendanceSerializer(attendance).data)
 
 
 class ProfileViewSet(viewsets.ReadOnlyModelViewSet):

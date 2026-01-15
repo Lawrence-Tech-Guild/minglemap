@@ -38,6 +38,7 @@ class Attendance(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     interest_areas = models.TextField(blank=True)
     connection_intent = models.TextField(blank=True)
+    visible_in_directory = models.BooleanField(default=True)
     consent_to_share_profile = models.BooleanField(default=False)
     consent_to_share_profile_at = models.DateTimeField(null=True, blank=True)
     signed_up_at = models.DateTimeField(default=timezone.now, editable=False)

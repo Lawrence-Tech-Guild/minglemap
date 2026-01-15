@@ -79,7 +79,10 @@ Possible responses:
 
 List consented attendee profiles for an event.
 
-`GET /api/events/{event_id}/directory/`
+> [!IMPORTANT]
+> Until authentication is enforced, directory requests must include an `attendance_id` for a signup in the event.
+
+`GET /api/events/{event_id}/directory/?attendance_id=42`
 
 Response body:
 
@@ -100,5 +103,43 @@ Response body:
 Possible responses:
 
 - `200` on success.
-- `403` if the requester is not signed up for the event (once auth is enforced).
+- `403` if the requester is not signed up for the event.
 - `404` if the event does not exist.
+
+## Directory visibility
+
+Update visibility and consent for an attendee signup.
+
+`PATCH /api/events/{event_id}/directory/visibility/`
+
+Request body:
+
+```json
+{
+  "attendance_id": 42,
+  "visible_in_directory": true,
+  "consent_to_share_profile": true
+}
+```
+
+Response body:
+
+```json
+{
+  "id": 42,
+  "event": 3,
+  "profile": 18,
+  "interest_areas": "open source, mentorship",
+  "connection_intent": "meet mentors or hiring managers",
+  "visible_in_directory": true,
+  "consent_to_share_profile": true,
+  "consent_to_share_profile_at": "2025-05-01T18:30:00Z",
+  "signed_up_at": "2025-05-01T18:30:00Z"
+}
+```
+
+Possible responses:
+
+- `200` on success.
+- `400` if no visibility fields are provided.
+- `404` if the attendance is not found for the event.

@@ -68,6 +68,11 @@ Consent coverage mix (per event):
 - Use stable IDs and deterministic timestamps.
 - Keep fixture data in `apps/core/fixtures/` or a dedicated test helper.
 
+> [!TIP]
+> Load the Phase 1 demo fixture with `python manage.py loaddata seed-phase1`.
+
+Current fixture: `apps/core/fixtures/seed-phase1.json`.
+
 ## Open questions
 
 - Do we need locale or timezone variants for events?

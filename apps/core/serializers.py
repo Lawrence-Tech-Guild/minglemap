@@ -36,6 +36,12 @@ class EventSignupSerializer(serializers.Serializer):
     consent_to_share_profile = serializers.BooleanField(required=False, default=False)
 
 
+class DirectoryVisibilitySerializer(serializers.Serializer):
+    attendance_id = serializers.IntegerField()
+    visible_in_directory = serializers.BooleanField(required=False)
+    consent_to_share_profile = serializers.BooleanField(required=False)
+
+
 class DirectoryProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
