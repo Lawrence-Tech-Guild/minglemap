@@ -53,3 +53,9 @@ extend-select = [
 # Ruff-format replaces Black
 quote-style = "preserve"         # keep existing quoting
 indent-style = "space"
+
+[tool.ruff.lint]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"**/migrations/*.py" = ["E501"]

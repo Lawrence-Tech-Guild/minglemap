@@ -15,11 +15,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+from apps.core.views import AttendanceViewSet, EventViewSet, ProfileViewSet
 from django.contrib import admin
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
-
-from apps.core.views import AttendanceViewSet, EventViewSet, ProfileViewSet
 
 router = DefaultRouter()
 router.register("events", EventViewSet)

@@ -7,67 +7,67 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0001_initial'),
+        ("core", "0001_initial"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='profile',
-            name='consent_level',
+            model_name="profile",
+            name="consent_level",
         ),
         migrations.AddField(
-            model_name='attendance',
-            name='connection_intent',
+            model_name="attendance",
+            name="connection_intent",
             field=models.TextField(blank=True),
         ),
         migrations.AddField(
-            model_name='attendance',
-            name='consent_to_share_profile',
+            model_name="attendance",
+            name="consent_to_share_profile",
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(
-            model_name='attendance',
-            name='consent_to_share_profile_at',
+            model_name="attendance",
+            name="consent_to_share_profile_at",
             field=models.DateTimeField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='attendance',
-            name='interest_areas',
+            model_name="attendance",
+            name="interest_areas",
             field=models.TextField(blank=True),
         ),
         migrations.AddField(
-            model_name='attendance',
-            name='signed_up_at',
+            model_name="attendance",
+            name="signed_up_at",
             field=models.DateTimeField(default=django.utils.timezone.now, editable=False),
         ),
         migrations.AddField(
-            model_name='event',
-            name='description',
+            model_name="event",
+            name="description",
             field=models.TextField(blank=True),
         ),
         migrations.AddField(
-            model_name='event',
-            name='estimated_attendance',
+            model_name="event",
+            name="estimated_attendance",
             field=models.PositiveIntegerField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='event',
-            name='signup_closes_at',
+            model_name="event",
+            name="signup_closes_at",
             field=models.DateTimeField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='event',
-            name='signup_opens_at',
+            model_name="event",
+            name="signup_opens_at",
             field=models.DateTimeField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='profile',
-            name='role',
+            model_name="profile",
+            name="role",
             field=models.CharField(blank=True, max_length=255),
         ),
         migrations.AlterField(
-            model_name='profile',
-            name='company',
+            model_name="profile",
+            name="company",
             field=models.CharField(blank=True, max_length=255),
         ),
     ]
