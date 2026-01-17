@@ -8,7 +8,7 @@
   "workspaceFolder": "/app",
   "workspaceMount": "source=${localWorkspaceFolder},target=/app,type=bind,consistency=cached",
   "overrideCommand": false,
-  "postCreateCommand": "test -f requirements-dev.txt && pip install -r requirements-dev.txt || true",
+  "postCreateCommand": "test -f requirements-dev.txt && pip install -r requirements-dev.txt || true; npm install -g @openai/codex@latest || true",
   "remoteUser": "root",
   "features": {
     "ghcr.io/devcontainers/features/git:1": {},
