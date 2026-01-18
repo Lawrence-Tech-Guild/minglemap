@@ -16,42 +16,36 @@ Provide a sprint-sized delivery plan that aligns the product roadmap with concre
 > [!IMPORTANT]
 > Any feature that exposes attendee data must include explicit consent and visibility controls before release.
 
-## Sprint map (proposed)
+## Sprint map (MVP demo focus)
 
-### Sprint 0: Project alignment and groundwork
+### Sprint 1: MVP foundations
 
-- Confirm product goals and success metrics for Phase 1.
-- Validate data model for events, attendee profiles, and consent.
-- Establish API contract draft and UI information architecture.
-- Create initial test plan and basic CI checks for API endpoints.
+- Event creation and signup flows with consent capture.
+- Attendee profiles with per-event visibility toggles enforced in API.
+- Public event directory UI (list, detail, signup) wired to API.
+- Seed data and fixtures for the default demo event.
+- Happy-path demo script drafted.
 
-### Sprint 1: Event signup + attendee profiles (Phase 1 core)
+### Sprint 2: Demoable browsing + feedback loop
 
-- Event creation and signup flows (admin + attendee).
-- Public attendee profile fields: interests and connection intent.
-- Consent gating for event-only visibility.
-- Basic API endpoints with tests.
-- UI: event listing, signup, and attendee directory.
+- Attendee browsing with search/filter (name, interests, intent).
+- Feedback collection (form or survey) reachable from the demo path.
+- Privacy copy refined and linked to consent language in UI.
+- Basic analytics for page hits and drop-off (opt-in, anonymized).
+- Demo rehearsal with feedback captured in TODO.md and docs/.
 
-### Sprint 2: Privacy-first browsing + feedback loop
+### Sprint 3: MVP polish and readiness
 
-- Profile visibility toggles and scoped access checks.
-- Attendee browsing UI with filters and search.
-- Feedback capture (short survey or form) for Phase 1 users.
-- Instrumentation for usage analytics (minimal, privacy-respecting).
+- Accessibility and UX polish on signup and browsing.
+- Error/empty states covered for demo data and live use.
+- Support artifacts: demo fixtures refreshed, runbook for demo resets.
+- Security/privacy checklist for MVP reviewed and signed off.
 
-### Sprint 3: Phase 2 foundation
+### Sprint 4: Post-MVP beta foundation
 
-- Expanded profile fields (bio, role, company).
-- Consent-based interaction primitives (request/share contact intent).
-- Notification preferences scaffolding (no automated notifications yet).
-- API contract revisions and migration strategy.
-
-### Sprint 4: Phase 2 polish and readiness
-
-- UX polish and accessibility pass for browsing.
-- Security and privacy review checklist.
-- Operational readiness: seed data, demo fixtures, deployment notes.
+- Expanded profile fields and consent-based interaction primitives.
+- Notification preference scaffolding without automated sends.
+- API contract revisions for beta scope; migration plan drafted.
 
 ## Risks and dependencies
 
@@ -63,5 +57,5 @@ Provide a sprint-sized delivery plan that aligns the product roadmap with concre
 
 - Feature stories meet acceptance criteria and are covered by tests.
 - API documentation updated if endpoints change.
-- Demo path validated (happy path walkthrough documented).
+- Demo path validated (happy path walkthrough documented and runnable).
 - Open questions captured in TODO.md with owners.

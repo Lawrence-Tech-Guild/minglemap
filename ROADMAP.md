@@ -2,50 +2,43 @@
 
 ## MingleMap Roadmap
 
-This roadmap outlines incremental phases of development to validate the idea, gather community input, and scale complexity based on real-world feedback.
+This roadmap prioritizes a demo-ready MVP that proves the core event networking value while keeping privacy and consent safeguards ahead of feature expansion.
 
-## Phase 1: Event-specific Connection Book ("Face" Book)
+> [!IMPORTANT]
+> MVP launches only with per-event opt-in visibility, auditable consent language, and no background notifications.
 
-A simplified initial test to gauge interest and usage:
+## MVP: Demo-ready Event Connection Book
 
-* **Event Signup:** Participants affirm attendance for specific events, stating their interest areas.
-* **Attendee Profiles:** Simple, public profiles listing attendees' interests and intentions for connections.
-* **Privacy First:** Explicit consent required. Profiles are only shared with attendees of the same event who opt in.
-* **Minimal Notifications:** No automated notifications; purely informational for attendees to browse at their discretion.
+- Event setup and signup: create events, capture RSVPs, and collect minimal attendee interests/intent.
+- Attendee profiles with explicit visibility toggles scoped to each event.
+- Browsing and discovery: searchable/filterable attendee directory for an event (name, interests, intent).
+- Demo data path: seeded sample event, attendees, and fixtures for repeatable walkthroughs.
+- Feedback loop: in-product survey or form plus a structured demo script for guided sessions.
+- Observability: basic analytics for page hits and funnel drop-off (privacy-preserving, opt-in).
 
-**Goals:** Validate basic concept, measure usage and value, and solicit feedback.
+**MVP success criteria:** a full demo path from event creation through attendee browsing and feedback capture that we can run live, with opt-in privacy upheld end-to-end.
 
----
+## Post-MVP (Beta Hardening)
 
-## Phase 2: Interactive and Privacy-Enhanced Features
+- Profile depth: bio, role, company, richer interests taxonomy.
+- Interaction requests: consent-based contact sharing and lightweight connection intents.
+- Privacy controls: visibility presets, auditability of consent, and clearer copy tested with users.
+- Operational readiness: admin tools for event setup, seed data refresh, and basic support runbook.
 
-Building on user feedback from Phase 1:
+## Future (After Beta Validation)
 
-* **Enhanced Profiles:** Professional bios, company affiliations, expanded interests.
-* **Consent-Based Interaction:** Users explicitly opt-in to share details and interact.
-* **Privacy Controls:** Robust visibility and notification controls to prevent intrusive alerts.
-* **Pre-event and Real-time Browsing:** Browse participants ahead of events or during attendance.
+- Notification preferences with explicit opt-in and quiet defaults.
+- Mobile-friendly proximity ideas (BLE) and real-time "nearby" visualizations.
+- Native mobile apps once privacy, consent, and value are validated on web.
 
-**Goals:** Refine user experience, solidify privacy standards, and grow user base.
+## Validation checkpoints
 
----
-
-## Phase 3: BLE-Enabled Proximity (Future Development)
-
-Once foundational aspects are proven and privacy concerns well-addressed:
-
-* **Bluetooth Low Energy (BLE):** Seamless proximity detection for real-time interactions.
-* **Interactive Visualizations:** Proximity visualizations, live "nearby" views.
-* **Mobile App:** Dedicated apps for Android and iOS, offering enhanced user experiences.
-
-**Goals:** Introduce advanced technology thoughtfully, optimizing networking efficiency and user comfort.
-
----
+- Demo rehearsal before each stakeholder or user session with fresh fixtures.
+- Feedback synthesis after every demo; roadmap and TODO.md updated with decisions.
+- Privacy review for any new data surfaced, stored, or logged.
 
 ## Immediate Next Steps
 
-* Open a GitHub Discussion "Roadmap RFC" for community review and discussion.
-* Schedule initial feedback session via Slack.
-* Pilot Phase 1 at an upcoming event to test and validate the concept.
-
-Feedback and participation from community members are vital. Please contribute your insights and ideas!
+- Finalize consent copy and visibility rules for MVP flows.
+- Build and publish the demo script plus seed data for the default event.
+- Open a "Roadmap RFC" thread to collect feedback on the MVP scope and next steps.
