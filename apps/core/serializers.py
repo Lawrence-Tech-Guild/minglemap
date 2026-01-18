@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Attendance, Event, Profile
+from .models import Attendance, Event, Feedback, Profile
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -55,3 +55,18 @@ class DirectoryEntrySerializer(serializers.ModelSerializer):
     class Meta:
         model = Attendance
         fields = ["attendance_id", "profile", "connection_intent"]
+
+
+class FeedbackSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Feedback
+        fields = [
+            "id",
+            "event",
+            "attendance",
+            "rating",
+            "message",
+            "contact",
+            "submitted_at",
+        ]
+        read_only_fields = ["id", "submitted_at", "event"]

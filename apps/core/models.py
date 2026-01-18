@@ -38,7 +38,7 @@ class Attendance(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     interest_areas = models.TextField(blank=True)
     connection_intent = models.TextField(blank=True)
-    visible_in_directory = models.BooleanField(default=True)
+    visible_in_directory = models.BooleanField(default=False)
     consent_to_share_profile = models.BooleanField(default=False)
     consent_to_share_profile_at = models.DateTimeField(null=True, blank=True)
     signed_up_at = models.DateTimeField(default=timezone.now, editable=False)
@@ -52,3 +52,19 @@ class Attendance(models.Model):
 
     def __str__(self) -> str:  # pragma: no cover - simple representation
         return f"{self.profile} @ {self.event}"
+
+
+class Feedback(models.Model):
+    """Feedback captured for a specific event."""
+
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    attendance = models.ForeignKey(
+        Attendance, null=True, blank=True, on_delete=models.SET_NULL
+    )
+    rating = models.IntegerField(null=True, blank=True)
+    message = models.TextField()
+    contact = models.CharField(max_length=255, blank=True)
+    submitted_at = models.DateTimeField(default=timezone.now, editable=False)
+
+    def __str__(self) -> str:  # pragma: no cover - simple representation
+        return f"Feedback for {self.event_id} ({self.attendance_id})"

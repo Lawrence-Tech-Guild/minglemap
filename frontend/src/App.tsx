@@ -1,415 +1,489 @@
-const events = [
-  {
-    id: 'event-1',
-    title: 'MingleMap Launch Salon',
-    date: 'Oct 12, 2025',
-    location: 'Ferry Building, SF',
-    focus: 'Founder matchmaking',
-    seatsLeft: 12,
-  },
-  {
-    id: 'event-2',
-    title: 'Designers and Operators',
-    date: 'Oct 28, 2025',
-    location: 'Mission Bay, SF',
-    focus: 'Ops-led networking',
-    seatsLeft: 6,
-  },
-  {
-    id: 'event-3',
-    title: 'AI Builders Open Studio',
-    date: 'Nov 7, 2025',
-    location: 'SoMa, SF',
-    focus: 'Hands-on demos',
-    seatsLeft: 20,
-  },
-  {
-    id: 'event-4',
-    title: 'Community Stewards Night',
-    date: 'Nov 19, 2025',
-    location: 'Berkeley, CA',
-    focus: 'Local ecosystems',
-    seatsLeft: 9,
-  },
-];
+/// <reference types="vite/client" />
+import { FormEvent, useEffect, useMemo, useState } from 'react';
 
-const attendees = [
-  {
-    id: 'attendee-1',
-    name: 'Priya N.',
-    role: 'Product Lead',
-    company: 'Signal Grove',
-    interests: ['Accessibility', 'Community', 'Fintech'],
-    intent: 'Looking to mentor',
-    status: 'Event-only visibility',
-  },
-  {
-    id: 'attendee-2',
-    name: 'Andre L.',
-    role: 'Founder',
-    company: 'Magnetic',
-    interests: ['Climate', 'Hardware', 'Policy'],
-    intent: 'Seeking co-founder',
-    status: 'Full profile shared',
-  },
-  {
-    id: 'attendee-3',
-    name: 'Maya R.',
-    role: 'Growth',
-    company: 'Openline',
-    interests: ['Creator economy', 'B2B', 'Events'],
-    intent: 'Hiring soon',
-    status: 'Event-only visibility',
-  },
-  {
-    id: 'attendee-4',
-    name: 'Jonas K.',
-    role: 'Researcher',
-    company: 'Sable Labs',
-    interests: ['AI safety', 'ML Ops', 'Ethics'],
-    intent: 'Open to collabs',
-    status: 'Full profile shared',
-  },
-  {
-    id: 'attendee-5',
-    name: 'Sasha M.',
-    role: 'Community',
-    company: 'Harbor Collective',
-    interests: ['DEI', 'Local makers', 'Workshops'],
-    intent: 'Looking to host',
-    status: 'Event-only visibility',
-  },
-  {
-    id: 'attendee-6',
-    name: 'Leo C.',
-    role: 'Engineer',
-    company: 'Pioneer',
-    interests: ['Infra', 'Dev tools', 'Open source'],
-    intent: 'Open to mentor',
-    status: 'Full profile shared',
-  },
-];
+type Event = {
+  id: number;
+  title: string;
+  location: string;
+  starts_at: string;
+  ends_at: string;
+  description?: string;
+};
 
-function App() {
+type DirectoryEntry = {
+  attendance_id: number;
+  connection_intent: string;
+  profile: { id: number; name: string; interests: string };
+};
+
+const API_BASE = import.meta.env.VITE_API_BASE ?? '';
+
+async function fetchJson<T>(path: string, init?: RequestInit): Promise<T> {
+  const url = `${API_BASE}${path}`;
+  const headers: HeadersInit = {
+    'Content-Type': 'application/json',
+    ...(init?.headers || {}),
+  };
+  const response = await fetch(url, { ...init, headers });
+  const data = await response.json();
+  if (!response.ok) {
+    const detail = (data && (data.detail || data.non_field_errors)) ?? response.statusText;
+    throw new Error(Array.isArray(detail) ? detail.join(', ') : detail);
+  }
+  return data;
+}
+
+export default function App() {
+  const [events, setEvents] = useState<Event[]>([]);
+  const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
+  const [attendanceId, setAttendanceId] = useState<number | null>(null);
+
+  const [signupForm, setSignupForm] = useState({
+    name: '',
+    company: '',
+    role: '',
+    bio: '',
+    interests: '',
+    interestAreas: '',
+    connectionIntent: '',
+    consent: false,
+  });
+  const [directoryFilters, setDirectoryFilters] = useState({
+    search: '',
+    interests: '',
+    connectionIntent: '',
+  });
+  const [visibility, setVisibility] = useState({
+    consent: false,
+    visible: false,
+  });
+  const [directoryEntries, setDirectoryEntries] = useState<DirectoryEntry[]>([]);
+  const [feedback, setFeedback] = useState({
+    rating: '',
+    message: '',
+    contact: '',
+  });
+  const [loading, setLoading] = useState<string | null>(null);
+  const [toast, setToast] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const selectedEvent = useMemo(
+    () => events.find((event) => event.id === selectedEventId) ?? null,
+    [events, selectedEventId]
+  );
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const data = await fetchJson<Event[]>('/api/events/');
+        setEvents(data);
+        if (data.length) {
+          setSelectedEventId(data[0].id);
+        }
+      } catch (err) {
+        setError((err as Error).message);
+      }
+    })();
+  }, []);
+
+  function resetMessages() {
+    setToast(null);
+    setError(null);
+  }
+
+  async function handleSignup(formEvent: FormEvent) {
+    formEvent.preventDefault();
+    resetMessages();
+    if (!selectedEventId) return;
+    setLoading('signup');
+    try {
+      const payload = {
+        profile: {
+          name: signupForm.name,
+          company: signupForm.company,
+          role: signupForm.role,
+          bio: signupForm.bio,
+          interests: signupForm.interests,
+        },
+        interest_areas: signupForm.interestAreas,
+        connection_intent: signupForm.connectionIntent,
+        consent_to_share_profile: signupForm.consent,
+      };
+      const data = await fetchJson<{ id: number; visible_in_directory: boolean }>(
+        `/api/events/${selectedEventId}/signups/`,
+        { method: 'POST', body: JSON.stringify(payload) }
+      );
+      setAttendanceId(data.id);
+      setVisibility({
+        consent: signupForm.consent,
+        visible: data.visible_in_directory ?? signupForm.consent,
+      });
+      setToast('Signup saved. Use the directory and visibility controls below.');
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setLoading(null);
+    }
+  }
+
+  async function loadDirectory(formEvent?: FormEvent) {
+    formEvent?.preventDefault();
+    resetMessages();
+    if (!selectedEventId || !attendanceId) {
+      setError('Sign up first to browse the directory.');
+      return;
+    }
+    setLoading('directory');
+    const params = new URLSearchParams({
+      attendance_id: String(attendanceId),
+    });
+    if (directoryFilters.search) params.set('search', directoryFilters.search);
+    if (directoryFilters.interests) params.set('interests', directoryFilters.interests);
+    if (directoryFilters.connectionIntent)
+      params.set('connection_intent', directoryFilters.connectionIntent);
+    try {
+      const data = await fetchJson<DirectoryEntry[]>(
+        `/api/events/${selectedEventId}/directory/?${params.toString()}`
+      );
+      setDirectoryEntries(data);
+      setToast(`Directory loaded (${data.length} people).`);
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setLoading(null);
+    }
+  }
+
+  async function handleVisibility(formEvent: FormEvent) {
+    formEvent.preventDefault();
+    resetMessages();
+    if (!selectedEventId || !attendanceId) {
+      setError('Sign up first to manage visibility.');
+      return;
+    }
+    setLoading('visibility');
+    try {
+      await fetchJson(`/api/events/${selectedEventId}/directory/visibility/`, {
+        method: 'PATCH',
+        body: JSON.stringify({
+          attendance_id: attendanceId,
+          consent_to_share_profile: visibility.consent,
+          visible_in_directory: visibility.visible,
+        }),
+      });
+      setToast('Visibility updated.');
+      await loadDirectory();
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setLoading(null);
+    }
+  }
+
+  async function handleFeedback(formEvent: FormEvent) {
+    formEvent.preventDefault();
+    resetMessages();
+    if (!selectedEventId) {
+      setError('Select an event to leave feedback.');
+      return;
+    }
+    setLoading('feedback');
+    try {
+      await fetchJson(`/api/events/${selectedEventId}/feedback/`, {
+        method: 'POST',
+        body: JSON.stringify({
+          attendance: attendanceId ?? undefined,
+          rating: feedback.rating ? Number(feedback.rating) : undefined,
+          message: feedback.message,
+          contact: feedback.contact,
+        }),
+      });
+      setToast('Feedback submitted. Thank you!');
+      setFeedback({ rating: '', message: '', contact: '' });
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setLoading(null);
+    }
+  }
+
   return (
     <div className="min-h-screen bg-[radial-gradient(1200px_900px_at_10%_-10%,rgba(242,140,75,0.25),transparent_60%),radial-gradient(1200px_900px_at_100%_0%,rgba(46,107,82,0.22),transparent_55%),linear-gradient(180deg,#f6efe5_0%,#efe4d7_60%,#f6efe5_100%)]">
-      <header className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-6">
+      <header className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-6 py-6">
         <div className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-full bg-ink text-sand shadow-lg shadow-sun/30">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-ink text-sand shadow-lg shadow-sun/30">
             <span className="font-display text-lg">MM</span>
           </div>
           <div>
-            <p className="font-display text-xl">MingleMap</p>
-            <p className="text-sm text-slate">Sprint 1 demo surface</p>
+            <p className="font-display text-xl">MingleMap MVP</p>
+            <p className="text-xs text-slate">Demo path: signup → visibility → directory → feedback</p>
           </div>
         </div>
-        <nav className="flex flex-wrap items-center gap-3 text-sm">
-          <button className="rounded-full border border-ink/15 bg-white/70 px-4 py-2 text-ink transition hover:-translate-y-0.5 hover:bg-white">
-            Events
-          </button>
-          <button className="rounded-full border border-ink/15 bg-white/70 px-4 py-2 text-ink transition hover:-translate-y-0.5 hover:bg-white">
-            Attendees
-          </button>
-          <button className="rounded-full bg-ink px-5 py-2 text-sand shadow-lg shadow-ink/20 transition hover:-translate-y-0.5">
-            Start signup
-          </button>
-        </nav>
+        <div className="flex items-center gap-2 text-sm">
+          <span className="rounded-full bg-white/70 px-3 py-1 text-ink shadow">Privacy-first</span>
+          <span className="rounded-full bg-moss/15 px-3 py-1 text-moss shadow">Consent gated</span>
+        </div>
       </header>
 
-      <main className="mx-auto max-w-6xl px-6 pb-16">
-        <section className="grid items-center gap-8 lg:grid-cols-[1.1fr_0.9fr]">
-          <div className="animate-fade-up">
-            <p className="text-xs uppercase tracking-[0.3em] text-slate">Phase 1 core</p>
-            <h1 className="mt-3 font-display text-4xl leading-tight sm:text-5xl">
-              Make event matchmaking feel human again.
-            </h1>
-            <p className="mt-4 text-lg text-slate">
-              A functional demo surface for event listing, signup, and attendee browsing with consent-first
-              visibility.
-            </p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <button className="rounded-full bg-ink px-6 py-3 text-sand shadow-lg shadow-ink/30 transition hover:-translate-y-0.5">
-                Publish an event
-              </button>
-              <button className="rounded-full border border-ink/15 bg-white/80 px-6 py-3 text-ink transition hover:-translate-y-0.5 hover:bg-white">
-                View directory
-              </button>
+      <main className="mx-auto max-w-5xl space-y-8 px-6 pb-16">
+        {(toast || error) && (
+          <div
+            className={`rounded-2xl border px-4 py-3 text-sm shadow ${
+              error ? 'border-rose/40 bg-rose/10 text-rose' : 'border-moss/40 bg-moss/10 text-moss'
+            }`}
+          >
+            {error || toast}
+          </div>
+        )}
+
+        <section className="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-xl">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <p className="text-xs uppercase tracking-[0.25em] text-slate">Step 1</p>
+              <h2 className="font-display text-2xl">Choose an event</h2>
+              <p className="text-sm text-slate">This drives signups, directory lookup, and feedback routing.</p>
             </div>
-            <div className="mt-8 grid gap-4 sm:grid-cols-3">
-              {[
-                { label: 'Events live', value: '4', detail: 'Oct-Nov window' },
-                { label: 'Attendees', value: '128', detail: 'Consent gated' },
-                { label: 'Matches', value: '43', detail: 'Suggested' },
-              ].map((stat) => (
-                <div
-                  key={stat.label}
-                  className="rounded-2xl border border-white/70 bg-white/70 p-4 shadow-sm backdrop-blur"
-                >
-                  <p className="text-xs uppercase tracking-[0.18em] text-slate">{stat.label}</p>
-                  <p className="mt-2 font-display text-2xl">{stat.value}</p>
-                  <p className="text-sm text-slate">{stat.detail}</p>
-                </div>
+            <div className="text-right text-xs text-slate">
+              {selectedEvent && (
+                <p>
+                  {new Date(selectedEvent.starts_at).toLocaleDateString()} — {selectedEvent.location}
+                </p>
+              )}
+            </div>
+          </div>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <select
+              className="w-full rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm shadow-sm sm:w-72"
+              value={selectedEventId ?? ''}
+              onChange={(e) => {
+                setSelectedEventId(Number(e.target.value));
+                setAttendanceId(null);
+                setDirectoryEntries([]);
+              }}
+            >
+              <option value="" disabled>
+                Select an event
+              </option>
+              {events.map((event) => (
+                <option key={event.id} value={event.id}>
+                  {event.title}
+                </option>
               ))}
-            </div>
-          </div>
-
-          <div className="animate-fade-up-delay rounded-3xl border border-white/70 bg-white/80 p-6 shadow-xl">
-            <div className="flex items-center justify-between">
-              <h2 className="font-display text-2xl">Next event</h2>
-              <span className="rounded-full bg-rose/15 px-3 py-1 text-xs font-semibold text-rose">
-                Seats closing
-              </span>
-            </div>
-            <div className="mt-4 rounded-2xl bg-mist p-5">
-              <p className="text-xs uppercase tracking-[0.25em] text-slate">MingleMap Launch Salon</p>
-              <p className="mt-2 font-display text-2xl">Ferry Building, SF</p>
-              <div className="mt-3 flex flex-wrap gap-2 text-sm text-slate">
-                <span>Oct 12, 2025</span>
-                <span>•</span>
-                <span>Founder matchmaking</span>
-              </div>
-            </div>
-            <div className="mt-6 grid gap-3 text-sm">
-              <div className="flex items-center justify-between rounded-xl border border-ink/10 bg-white px-4 py-3">
-                <span>Privacy-first visibility</span>
-                <span className="font-semibold text-moss">Enabled</span>
-              </div>
-              <div className="flex items-center justify-between rounded-xl border border-ink/10 bg-white px-4 py-3">
-                <span>Check-in roster</span>
-                <span className="font-semibold text-sun">Draft</span>
-              </div>
-              <div className="flex items-center justify-between rounded-xl border border-ink/10 bg-white px-4 py-3">
-                <span>Intro queue</span>
-                <span className="font-semibold text-rose">5 requests</span>
-              </div>
-            </div>
-            <button className="mt-6 w-full rounded-2xl bg-ink px-5 py-3 text-sm font-semibold text-sand shadow-lg shadow-ink/20 transition hover:-translate-y-0.5">
-              Open signup dashboard
-            </button>
-          </div>
-        </section>
-
-        <section className="mt-16">
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <div>
-              <p className="text-xs uppercase tracking-[0.25em] text-slate">Event listing</p>
-              <h2 className="mt-2 font-display text-3xl">Upcoming events</h2>
-            </div>
-            <button className="rounded-full border border-ink/15 bg-white/70 px-5 py-2 text-sm text-ink transition hover:-translate-y-0.5">
-              Create new event
-            </button>
-          </div>
-          <div className="mt-8 grid gap-6 md:grid-cols-2">
-            {events.map((event) => (
-              <article
-                key={event.id}
-                className="group rounded-3xl border border-white/80 bg-white/80 p-6 shadow-lg transition hover:-translate-y-1"
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <p className="text-xs uppercase tracking-[0.2em] text-slate">{event.date}</p>
-                    <h3 className="mt-2 font-display text-2xl">{event.title}</h3>
-                  </div>
-                  <span className="rounded-full bg-sun/15 px-3 py-1 text-xs font-semibold text-sun">
-                    {event.seatsLeft} seats left
-                  </span>
-                </div>
-                <p className="mt-3 text-sm text-slate">{event.location}</p>
-                <p className="mt-4 text-sm text-slate">{event.focus}</p>
-                <div className="mt-6 flex items-center justify-between text-sm">
-                  <span className="text-slate">Signup flow ready</span>
-                  <button className="rounded-full bg-ink/90 px-4 py-2 text-sand transition group-hover:bg-ink">
-                    View details
-                  </button>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section className="mt-16 grid gap-8 lg:grid-cols-[1.05fr_0.95fr]">
-          <div className="rounded-3xl border border-white/80 bg-white/80 p-6 shadow-lg">
-            <p className="text-xs uppercase tracking-[0.25em] text-slate">Event signup</p>
-            <h2 className="mt-2 font-display text-3xl">Attendee profile intake</h2>
-            <form className="mt-6 grid gap-4">
-              <div>
-                <label className="text-sm text-slate">Full name</label>
-                <input
-                  className="mt-2 w-full rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm shadow-sm focus:border-ink/30 focus:outline-none"
-                  placeholder="Taylor James"
-                />
-              </div>
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div>
-                  <label className="text-sm text-slate">Role</label>
-                  <input
-                    className="mt-2 w-full rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm shadow-sm focus:border-ink/30 focus:outline-none"
-                    placeholder="Founder"
-                  />
-                </div>
-                <div>
-                  <label className="text-sm text-slate">Company</label>
-                  <input
-                    className="mt-2 w-full rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm shadow-sm focus:border-ink/30 focus:outline-none"
-                    placeholder="MingleMap"
-                  />
-                </div>
-              </div>
-              <div>
-                <label className="text-sm text-slate">Interests</label>
-                <input
-                  className="mt-2 w-full rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm shadow-sm focus:border-ink/30 focus:outline-none"
-                  placeholder="Community, AI builders, Partnerships"
-                />
-              </div>
-              <div>
-                <label className="text-sm text-slate">Connection intent</label>
-                <select className="mt-2 w-full rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm shadow-sm focus:border-ink/30 focus:outline-none">
-                  <option>Meet collaborators</option>
-                  <option>Find mentors</option>
-                  <option>Hiring</option>
-                  <option>Looking to host</option>
-                </select>
-              </div>
-              <button className="rounded-2xl bg-ink px-5 py-3 text-sm font-semibold text-sand shadow-lg shadow-ink/20 transition hover:-translate-y-0.5">
-                Save profile and continue
-              </button>
-            </form>
-          </div>
-
-          <div className="space-y-6">
-            <div className="rounded-3xl border border-white/80 bg-white/80 p-6 shadow-lg">
-              <p className="text-xs uppercase tracking-[0.25em] text-slate">Consent gating</p>
-              <h3 className="mt-2 font-display text-2xl">Visibility controls</h3>
-              <div className="mt-5 space-y-4 text-sm text-slate">
-                {[
-                  {
-                    title: 'Event-only visibility',
-                    detail: 'Your profile is visible to attendees of this event only.',
-                    checked: true,
-                  },
-                  {
-                    title: 'Share contact intent',
-                    detail: 'Signal interest in introductions without sharing contact details.',
-                    checked: true,
-                  },
-                  {
-                    title: 'Full profile to hosts',
-                    detail: 'Event hosts can see your role, company, and interests.',
-                    checked: false,
-                  },
-                ].map((option) => (
-                  <label key={option.title} className="flex items-start gap-3 rounded-2xl border border-ink/10 bg-white px-4 py-3">
-                    <input
-                      type="checkbox"
-                      defaultChecked={option.checked}
-                      className="mt-1 h-4 w-4 accent-ink"
-                    />
-                    <span>
-                      <span className="block font-semibold text-ink">{option.title}</span>
-                      <span className="text-sm text-slate">{option.detail}</span>
-                    </span>
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            <div className="rounded-3xl border border-white/80 bg-white/80 p-6 shadow-lg">
-              <p className="text-xs uppercase tracking-[0.25em] text-slate">Preview</p>
-              <h3 className="mt-2 font-display text-2xl">Attendee card</h3>
-              <div className="mt-4 rounded-2xl border border-ink/10 bg-white p-5">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-display text-xl">Taylor James</p>
-                    <p className="text-sm text-slate">Founder · MingleMap</p>
-                  </div>
-                  <span className="rounded-full bg-moss/15 px-3 py-1 text-xs font-semibold text-moss">
-                    Event-only
-                  </span>
-                </div>
-                <div className="mt-4 flex flex-wrap gap-2 text-xs text-slate">
-                  {['Community', 'AI builders', 'Partnerships'].map((tag) => (
-                    <span key={tag} className="rounded-full bg-sand px-3 py-1">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-                <p className="mt-4 text-sm text-slate">Intent: Meet collaborators</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="mt-16">
-          <div className="flex flex-wrap items-end justify-between gap-4">
-            <div>
-              <p className="text-xs uppercase tracking-[0.25em] text-slate">Attendee directory</p>
-              <h2 className="mt-2 font-display text-3xl">Browse who is coming</h2>
-            </div>
-            <button className="rounded-full border border-ink/15 bg-white/70 px-5 py-2 text-sm text-ink transition hover:-translate-y-0.5">
-              Export roster
-            </button>
-          </div>
-          <div className="mt-6 flex flex-wrap gap-3">
-            <input
-              className="min-w-[220px] flex-1 rounded-full border border-ink/10 bg-white px-5 py-3 text-sm shadow-sm focus:border-ink/30 focus:outline-none"
-              placeholder="Search by name or interest"
-            />
-            <select className="rounded-full border border-ink/10 bg-white px-5 py-3 text-sm shadow-sm focus:border-ink/30 focus:outline-none">
-              <option>All intents</option>
-              <option>Meet collaborators</option>
-              <option>Hiring</option>
-              <option>Looking to mentor</option>
             </select>
-            <button className="rounded-full bg-ink px-5 py-3 text-sm text-sand shadow-lg shadow-ink/20 transition hover:-translate-y-0.5">
-              Apply filters
+            {selectedEvent?.description && (
+              <p className="rounded-2xl bg-mist px-4 py-3 text-sm text-slate">{selectedEvent.description}</p>
+            )}
+          </div>
+        </section>
+
+        <section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+          <form
+            onSubmit={handleSignup}
+            className="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-xl"
+          >
+            <p className="text-xs uppercase tracking-[0.25em] text-slate">Step 2</p>
+            <h3 className="mt-2 font-display text-xl">Sign up with consent</h3>
+            <div className="mt-4 grid gap-4 sm:grid-cols-2">
+              <input
+                required
+                className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm shadow-sm"
+                placeholder="Name"
+                value={signupForm.name}
+                onChange={(e) => setSignupForm({ ...signupForm, name: e.target.value })}
+              />
+              <input
+                className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm shadow-sm"
+                placeholder="Company"
+                value={signupForm.company}
+                onChange={(e) => setSignupForm({ ...signupForm, company: e.target.value })}
+              />
+              <input
+                className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm shadow-sm"
+                placeholder="Role"
+                value={signupForm.role}
+                onChange={(e) => setSignupForm({ ...signupForm, role: e.target.value })}
+              />
+              <input
+                className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm shadow-sm"
+                placeholder="Interests (comma separated)"
+                value={signupForm.interests}
+                onChange={(e) => setSignupForm({ ...signupForm, interests: e.target.value })}
+              />
+            </div>
+            <textarea
+              className="mt-4 w-full rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm shadow-sm"
+              placeholder="Short bio (optional)"
+              value={signupForm.bio}
+              onChange={(e) => setSignupForm({ ...signupForm, bio: e.target.value })}
+            />
+            <div className="mt-4 grid gap-4 sm:grid-cols-2">
+              <input
+                className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm shadow-sm"
+                placeholder="Interest areas (internal)"
+                value={signupForm.interestAreas}
+                onChange={(e) => setSignupForm({ ...signupForm, interestAreas: e.target.value })}
+              />
+              <input
+                className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm shadow-sm"
+                placeholder="Connection intent (visible)"
+                value={signupForm.connectionIntent}
+                onChange={(e) => setSignupForm({ ...signupForm, connectionIntent: e.target.value })}
+              />
+            </div>
+            <label className="mt-4 flex items-start gap-3 text-sm text-ink">
+              <input
+                type="checkbox"
+                checked={signupForm.consent}
+                onChange={(e) => setSignupForm({ ...signupForm, consent: e.target.checked })}
+                className="mt-1 h-4 w-4 rounded border-ink/20"
+              />
+              <span>
+                I consent to share my profile with attendees of this event (required to browse or appear in the
+                directory).
+              </span>
+            </label>
+            <button
+              type="submit"
+              disabled={loading === 'signup'}
+              className="mt-5 w-full rounded-2xl bg-ink px-5 py-3 text-sm font-semibold text-sand shadow-lg shadow-ink/20 transition hover:-translate-y-0.5 disabled:opacity-50"
+            >
+              {loading === 'signup' ? 'Submitting…' : 'Submit signup'}
+            </button>
+          </form>
+
+          <form
+            onSubmit={handleVisibility}
+            className="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-xl"
+          >
+            <p className="text-xs uppercase tracking-[0.25em] text-slate">Step 3</p>
+            <h3 className="mt-2 font-display text-xl">Visibility + consent toggles</h3>
+            <p className="mt-2 text-sm text-slate">
+              Visibility requires consent. Turn both on to appear in the directory and browse others.
+            </p>
+            <div className="mt-4 space-y-3 text-sm">
+              <label className="flex items-center gap-3">
+                <input
+                  type="checkbox"
+                  checked={visibility.consent}
+                  onChange={(e) => setVisibility((prev) => ({ ...prev, consent: e.target.checked }))}
+                  className="h-4 w-4 rounded border-ink/20"
+                />
+                <span>Consent to share profile for this event</span>
+              </label>
+              <label className="flex items-center gap-3">
+                <input
+                  type="checkbox"
+                  checked={visibility.visible}
+                  onChange={(e) => setVisibility((prev) => ({ ...prev, visible: e.target.checked }))}
+                  className="h-4 w-4 rounded border-ink/20"
+                />
+                <span>Show me in the attendee directory</span>
+              </label>
+            </div>
+            <button
+              type="submit"
+              disabled={loading === 'visibility'}
+              className="mt-5 w-full rounded-2xl bg-moss px-5 py-3 text-sm font-semibold text-sand shadow-lg shadow-moss/30 transition hover:-translate-y-0.5 disabled:opacity-50"
+            >
+              {loading === 'visibility' ? 'Saving…' : 'Save visibility'}
+            </button>
+          </form>
+        </section>
+
+        <section className="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-xl">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <p className="text-xs uppercase tracking-[0.25em] text-slate">Step 4</p>
+              <h3 className="font-display text-xl">Browse the directory</h3>
+              <p className="text-sm text-slate">Search by name, interests, or connection intent.</p>
+            </div>
+            <button
+              onClick={loadDirectory}
+              disabled={loading === 'directory'}
+              className="rounded-full bg-ink px-4 py-2 text-sm font-semibold text-sand shadow-lg shadow-ink/20 transition hover:-translate-y-0.5 disabled:opacity-50"
+            >
+              {loading === 'directory' ? 'Loading…' : 'Load directory'}
             </button>
           </div>
-          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {attendees.map((attendee) => (
-              <article key={attendee.id} className="rounded-3xl border border-white/80 bg-white/80 p-5 shadow-lg">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="font-display text-xl">{attendee.name}</p>
-                    <p className="text-sm text-slate">
-                      {attendee.role} · {attendee.company}
-                    </p>
-                  </div>
-                  <span className="rounded-full bg-moss/15 px-3 py-1 text-xs font-semibold text-moss">
-                    {attendee.intent}
-                  </span>
-                </div>
-                <div className="mt-4 flex flex-wrap gap-2 text-xs text-slate">
-                  {attendee.interests.map((interest) => (
-                    <span key={interest} className="rounded-full bg-sand px-3 py-1">
-                      {interest}
-                    </span>
-                  ))}
-                </div>
-                <div className="mt-4 flex items-center justify-between text-xs text-slate">
-                  <span>{attendee.status}</span>
-                  <button className="rounded-full border border-ink/10 bg-white px-3 py-1 text-ink">
-                    Request intro
-                  </button>
-                </div>
+          <form onSubmit={loadDirectory} className="mt-4 grid gap-3 md:grid-cols-3">
+            <input
+              className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm shadow-sm"
+              placeholder="Search name or intent"
+              value={directoryFilters.search}
+              onChange={(e) => setDirectoryFilters({ ...directoryFilters, search: e.target.value })}
+            />
+            <input
+              className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm shadow-sm"
+              placeholder="Interests filter"
+              value={directoryFilters.interests}
+              onChange={(e) => setDirectoryFilters({ ...directoryFilters, interests: e.target.value })}
+            />
+            <input
+              className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm shadow-sm"
+              placeholder="Connection intent filter"
+              value={directoryFilters.connectionIntent}
+              onChange={(e) =>
+                setDirectoryFilters({ ...directoryFilters, connectionIntent: e.target.value })
+              }
+            />
+          </form>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            {directoryEntries.map((entry) => (
+              <article
+                key={entry.attendance_id}
+                className="rounded-2xl border border-ink/10 bg-white px-4 py-4 shadow-sm"
+              >
+                <p className="font-display text-lg">{entry.profile.name}</p>
+                <p className="mt-1 text-sm text-slate">{entry.profile.interests || 'No interests shared'}</p>
+                <p className="mt-2 text-sm text-ink">
+                  <span className="font-semibold">Intent:</span> {entry.connection_intent || 'Not specified'}
+                </p>
               </article>
             ))}
+            {!directoryEntries.length && (
+              <div className="rounded-2xl border border-dashed border-ink/15 bg-white/40 px-4 py-5 text-sm text-slate">
+                No attendees yet. Load the directory after opting in.
+              </div>
+            )}
           </div>
+        </section>
+
+        <section className="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-xl">
+          <p className="text-xs uppercase tracking-[0.25em] text-slate">Step 5</p>
+          <h3 className="mt-2 font-display text-xl">Capture feedback from the demo</h3>
+          <form onSubmit={handleFeedback} className="mt-4 grid gap-3 md:grid-cols-3">
+            <input
+              className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm shadow-sm"
+              placeholder="Rating (1-5)"
+              value={feedback.rating}
+              onChange={(e) => setFeedback({ ...feedback, rating: e.target.value })}
+              type="number"
+              min="1"
+              max="5"
+            />
+            <input
+              className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm shadow-sm"
+              placeholder="Contact (optional)"
+              value={feedback.contact}
+              onChange={(e) => setFeedback({ ...feedback, contact: e.target.value })}
+            />
+            <textarea
+              className="md:col-span-3 rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm shadow-sm"
+              placeholder="What worked? What should change?"
+              value={feedback.message}
+              onChange={(e) => setFeedback({ ...feedback, message: e.target.value })}
+              required
+            />
+            <button
+              type="submit"
+              disabled={loading === 'feedback'}
+              className="md:col-span-3 rounded-2xl bg-ink px-5 py-3 text-sm font-semibold text-sand shadow-lg shadow-ink/20 transition hover:-translate-y-0.5 disabled:opacity-50"
+            >
+              {loading === 'feedback' ? 'Submitting…' : 'Submit feedback'}
+            </button>
+          </form>
         </section>
       </main>
-
-      <footer className="border-t border-white/70">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-6 py-8 text-sm text-slate">
-          <p>Demo surface for Sprint 1 UI scope.</p>
-          <div className="flex items-center gap-4">
-            <span>Privacy-first</span>
-            <span>•</span>
-            <span>Consent gated</span>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
-
-export default App;

@@ -27,8 +27,13 @@ services:
     build:
       context: .
       dockerfile: Dockerfile # or replace with an image if you don’t need a custom build
-    command: >
-      sh -c " python manage.py migrate && daphne -b 0.0.0.0 -p 8000 minglemap.asgi:application "
+    command:
+      - daphne
+      - -b
+      - 0.0.0.0
+      - -p
+      - "8000"
+      - minglemap.asgi:application
     volumes:
       - .:/app # live reload on host edits
     environment:
