@@ -36,7 +36,9 @@ exclude = [
   "venv",
   "migrations",
   "static",
-]
+],
+ignore = ["E501"]
+
 extend-select = [
   # Everything you used to get from Flake8 + Black + isort
   "E",   # pycodestyle errors
@@ -54,8 +56,6 @@ extend-select = [
 quote-style = "preserve"         # keep existing quoting
 indent-style = "space"
 
-[tool.ruff.lint]
-ignore = ["E501"]
 
 [tool.ruff.lint.per-file-ignores]
 "**/migrations/*.py" = ["E501"]
