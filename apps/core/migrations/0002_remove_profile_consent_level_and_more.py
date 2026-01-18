@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("core", "0001_initial"),
     ]
@@ -38,7 +37,9 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="attendance",
             name="signed_up_at",
-            field=models.DateTimeField(default=django.utils.timezone.now, editable=False),
+            field=models.DateTimeField(
+                default=django.utils.timezone.now, editable=False
+            ),
         ),
         migrations.AddField(
             model_name="event",

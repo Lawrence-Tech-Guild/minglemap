@@ -104,9 +104,7 @@ class EventViewSet(viewsets.ReadOnlyModelViewSet):
                 {"detail": "Attendance id must be an integer."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        if not Attendance.objects.filter(
-            event=event, id=attendance_id_int
-        ).exists():
+        if not Attendance.objects.filter(event=event, id=attendance_id_int).exists():
             return Response(
                 {"detail": "Sign up is required to view the directory."},
                 status=status.HTTP_403_FORBIDDEN,

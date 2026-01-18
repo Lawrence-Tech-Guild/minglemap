@@ -6,4 +6,3 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         call_command("loaddata", "seed")
-
