@@ -2,9 +2,17 @@
   "name": "MingleMap (web)",
   "dockerComposeFile": [
     "../docker-compose.yml",
+    "../docker-compose.override.yml",
     "compose.dev.yml"
   ],
   "service": "web",
+  "runServices": [
+    "db",
+    "redis",
+    "web",
+    "frontend"
+  ],
+  "shutdownAction": "stopCompose",
   "workspaceFolder": "/app",
   "workspaceMount": "source=${localWorkspaceFolder},target=/app,type=bind,consistency=cached",
   "overrideCommand": false,

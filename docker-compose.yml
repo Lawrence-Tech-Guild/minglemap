@@ -1,3 +1,5 @@
+name: minglemap
+
 services:
   # ───────────── Database (PostGIS) ─────────────
   db:
@@ -24,6 +26,7 @@ services:
 
   # ───────────── Django / Daphne ─────────────
   web:
+    image: minglemap-web:dev # deterministic tag; avoid implicit :latest
     build:
       context: .
       dockerfile: Dockerfile # or replace with an image if you don’t need a custom build

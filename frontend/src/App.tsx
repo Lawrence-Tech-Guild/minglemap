@@ -16,6 +16,16 @@ type DirectoryEntry = {
   profile: { id: number; name: string; interests: string };
 };
 
+type EventVisibility = {
+  consent: boolean;
+  visible: boolean;
+};
+
+type EventAttendanceState = {
+  attendanceId: number;
+  visibility: EventVisibility;
+};
+
 const API_BASE = import.meta.env.VITE_API_BASE ?? '';
 
 async function fetchJson<T>(path: string, init?: RequestInit): Promise<T> {
@@ -37,6 +47,7 @@ export default function App() {
   const [events, setEvents] = useState<Event[]>([]);
   const [selectedEventId, setSelectedEventId] = useState<number | null>(null);
   const [attendanceId, setAttendanceId] = useState<number | null>(null);
+  const [eventAttendance, setEventAttendance] = useState<Record<number, EventAttendanceState>>({});
 
   const [signupForm, setSignupForm] = useState({
     name: '',
@@ -53,10 +64,7 @@ export default function App() {
     interests: '',
     connectionIntent: '',
   });
-  const [visibility, setVisibility] = useState({
-    consent: false,
-    visible: false,
-  });
+  const [visibility, setVisibility] = useState<EventVisibility>({ consent: false, visible: false });
   const [directoryEntries, setDirectoryEntries] = useState<DirectoryEntry[]>([]);
   const [feedback, setFeedback] = useState({
     rating: '',
@@ -109,15 +117,24 @@ export default function App() {
         connection_intent: signupForm.connectionIntent,
         consent_to_share_profile: signupForm.consent,
       };
-      const data = await fetchJson<{ id: number; visible_in_directory: boolean }>(
+      const data = await fetchJson<{
+        id: number;
+        consent_to_share_profile: boolean;
+        visible_in_directory: boolean;
+      }>(
         `/api/events/${selectedEventId}/signups/`,
         { method: 'POST', body: JSON.stringify(payload) }
       );
-      setAttendanceId(data.id);
-      setVisibility({
-        consent: signupForm.consent,
+      const nextVisibility = {
+        consent: data.consent_to_share_profile ?? signupForm.consent,
         visible: data.visible_in_directory ?? signupForm.consent,
-      });
+      };
+      setAttendanceId(data.id);
+      setVisibility(nextVisibility);
+      setEventAttendance((prev) => ({
+        ...prev,
+        [selectedEventId]: { attendanceId: data.id, visibility: nextVisibility },
+      }));
       setToast('Signup saved. Use the directory and visibility controls below.');
     } catch (err) {
       setError((err as Error).message);
@@ -163,7 +180,11 @@ export default function App() {
     }
     setLoading('visibility');
     try {
-      await fetchJson(`/api/events/${selectedEventId}/directory/visibility/`, {
+      const data = await fetchJson<{
+        id: number;
+        consent_to_share_profile: boolean;
+        visible_in_directory: boolean;
+      }>(`/api/events/${selectedEventId}/directory/visibility/`, {
         method: 'PATCH',
         body: JSON.stringify({
           attendance_id: attendanceId,
@@ -171,6 +192,15 @@ export default function App() {
           visible_in_directory: visibility.visible,
         }),
       });
+      const nextVisibility = {
+        consent: data.consent_to_share_profile,
+        visible: data.visible_in_directory,
+      };
+      setVisibility(nextVisibility);
+      setEventAttendance((prev) => ({
+        ...prev,
+        [selectedEventId]: { attendanceId, visibility: nextVisibility },
+      }));
       setToast('Visibility updated.');
       await loadDirectory();
     } catch (err) {
@@ -256,8 +286,16 @@ export default function App() {
               className="w-full rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm shadow-sm sm:w-72"
               value={selectedEventId ?? ''}
               onChange={(e) => {
-                setSelectedEventId(Number(e.target.value));
-                setAttendanceId(null);
+                const nextEventId = Number(e.target.value);
+                const cached = eventAttendance[nextEventId];
+                setSelectedEventId(nextEventId);
+                setAttendanceId(cached?.attendanceId ?? null);
+                setVisibility(cached?.visibility ?? { consent: false, visible: false });
+                setSignupForm((prev) => ({
+                  ...prev,
+                  consent: cached?.visibility.consent ?? false,
+                }));
+                setDirectoryFilters({ search: '', interests: '', connectionIntent: '' });
                 setDirectoryEntries([]);
               }}
             >
@@ -338,8 +376,8 @@ export default function App() {
                 className="mt-1 h-4 w-4 rounded border-ink/20"
               />
               <span>
-                I consent to share my profile with attendees of this event (required to browse or appear in the
-                directory).
+                I consent to share my profile with other attendees of this event. I can turn this off anytime in
+                visibility settings.
               </span>
             </label>
             <button
@@ -358,26 +396,32 @@ export default function App() {
             <p className="text-xs uppercase tracking-[0.25em] text-slate">Step 3</p>
             <h3 className="mt-2 font-display text-xl">Visibility + consent toggles</h3>
             <p className="mt-2 text-sm text-slate">
-              Visibility requires consent. Turn both on to appear in the directory and browse others.
+              These settings apply only to the selected event. Visibility requires consent to browse or appear.
             </p>
             <div className="mt-4 space-y-3 text-sm">
               <label className="flex items-center gap-3">
                 <input
                   type="checkbox"
                   checked={visibility.consent}
-                  onChange={(e) => setVisibility((prev) => ({ ...prev, consent: e.target.checked }))}
+                  onChange={(e) =>
+                    setVisibility((prev) => ({
+                      consent: e.target.checked,
+                      visible: e.target.checked ? prev.visible : false,
+                    }))
+                  }
                   className="h-4 w-4 rounded border-ink/20"
                 />
-                <span>Consent to share profile for this event</span>
+                <span>Consent to share my profile for this event</span>
               </label>
               <label className="flex items-center gap-3">
                 <input
                   type="checkbox"
                   checked={visibility.visible}
+                  disabled={!visibility.consent}
                   onChange={(e) => setVisibility((prev) => ({ ...prev, visible: e.target.checked }))}
                   className="h-4 w-4 rounded border-ink/20"
                 />
-                <span>Show me in the attendee directory</span>
+                <span>Show me in this event's attendee directory</span>
               </label>
             </div>
             <button

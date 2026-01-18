@@ -4,7 +4,7 @@ FROM python:3.12-slim
 # ---- OS packages needed for psycopg2 + GeoDjango ----
 RUN apt-get update \
        && apt-get install -y --no-install-recommends \
-       build-essential libpq-dev gdal-bin \
+       build-essential libpq-dev gdal-bin git \
        && rm -rf /var/lib/apt/lists/*
 
 # ---- Python deps ----

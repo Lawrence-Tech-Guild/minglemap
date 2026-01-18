@@ -119,7 +119,7 @@ class EventViewSet(viewsets.ReadOnlyModelViewSet):
         if not viewer_attendance.consent_to_share_profile:
             return Response(
                 {
-                    "detail": "Consent is required to view the directory. Update visibility to opt in."
+                    "detail": "Consent is required to view the directory for this event. Update visibility to opt in."
                 },
                 status=status.HTTP_403_FORBIDDEN,
             )
@@ -182,7 +182,7 @@ class EventViewSet(viewsets.ReadOnlyModelViewSet):
         if new_visibility and not new_consent:
             return Response(
                 {
-                    "detail": "Consent is required to appear in the directory. Enable consent first."
+                    "detail": "Consent is required to appear in this event's directory. Enable consent first."
                 },
                 status=status.HTTP_400_BAD_REQUEST,
             )

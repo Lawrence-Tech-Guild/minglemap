@@ -277,6 +277,27 @@ def test_directory_visibility_requires_consent_to_be_visible() -> None:
     assert "Consent is required" in response.json()["detail"]
 
 
+def test_directory_visibility_rejects_mismatched_event() -> None:
+    event = create_event()
+    other_event = Event.objects.create(
+        title="Other Event",
+        starts_at=timezone.now(),
+        ends_at=timezone.now() + timedelta(hours=2),
+        location="Remote",
+    )
+    attendance = Attendance.objects.create(event=other_event, profile=create_profile())
+    client = APIClient()
+
+    response = client.patch(
+        f"/api/events/{event.id}/directory/visibility/",
+        {"attendance_id": attendance.id, "consent_to_share_profile": True},
+        format="json",
+    )
+
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Attendance not found for this event."
+
+
 def test_event_directory_supports_search_filters() -> None:
     event = create_event()
     viewer = create_profile()
