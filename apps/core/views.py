@@ -173,12 +173,20 @@ class EventViewSet(viewsets.ReadOnlyModelViewSet):
             )
 
         update_fields = []
-        new_consent = serializer.validated_data.get(
-            "consent_to_share_profile", attendance.consent_to_share_profile
+        requested_consent = serializer.validated_data.get("consent_to_share_profile")
+        requested_visibility = serializer.validated_data.get("visible_in_directory")
+        new_consent = (
+            attendance.consent_to_share_profile
+            if requested_consent is None
+            else requested_consent
         )
-        new_visibility = serializer.validated_data.get(
-            "visible_in_directory", attendance.visible_in_directory
+        new_visibility = (
+            attendance.visible_in_directory
+            if requested_visibility is None
+            else requested_visibility
         )
+        if requested_consent is False:
+            new_visibility = False
         if new_visibility and not new_consent:
             return Response(
                 {
@@ -186,22 +194,16 @@ class EventViewSet(viewsets.ReadOnlyModelViewSet):
                 },
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        if "visible_in_directory" in serializer.validated_data:
-            attendance.visible_in_directory = serializer.validated_data[
-                "visible_in_directory"
-            ]
+        if requested_visibility is not None or (
+            requested_consent is False and attendance.visible_in_directory
+        ):
+            attendance.visible_in_directory = new_visibility
             update_fields.append("visible_in_directory")
-        if "consent_to_share_profile" in serializer.validated_data:
-            consent_to_share_profile = serializer.validated_data[
-                "consent_to_share_profile"
-            ]
-            attendance.consent_to_share_profile = consent_to_share_profile
+        if requested_consent is not None:
+            attendance.consent_to_share_profile = requested_consent
             attendance.consent_to_share_profile_at = (
-                timezone.now() if consent_to_share_profile else None
+                timezone.now() if requested_consent else None
             )
-            if consent_to_share_profile is False:
-                attendance.visible_in_directory = False
-                update_fields.append("visible_in_directory")
             update_fields.extend(
                 ["consent_to_share_profile", "consent_to_share_profile_at"]
             )

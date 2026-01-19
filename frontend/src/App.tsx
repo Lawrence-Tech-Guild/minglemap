@@ -237,6 +237,8 @@ export default function App() {
     }
   }
 
+  const hasSignup = Boolean(attendanceId);
+
   return (
     <div className="min-h-screen bg-[radial-gradient(1200px_900px_at_10%_-10%,rgba(242,140,75,0.25),transparent_60%),radial-gradient(1200px_900px_at_100%_0%,rgba(46,107,82,0.22),transparent_55%),linear-gradient(180deg,#f6efe5_0%,#efe4d7_60%,#f6efe5_100%)]">
       <header className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-6 py-6">
@@ -376,8 +378,8 @@ export default function App() {
                 className="mt-1 h-4 w-4 rounded border-ink/20"
               />
               <span>
-                I consent to share my profile with other attendees of this event. I can turn this off anytime in
-                visibility settings.
+                I consent to share my profile with other attendees of this event. This is event-specific and can be
+                changed anytime in visibility settings.
               </span>
             </label>
             <button
@@ -396,13 +398,20 @@ export default function App() {
             <p className="text-xs uppercase tracking-[0.25em] text-slate">Step 3</p>
             <h3 className="mt-2 font-display text-xl">Visibility + consent toggles</h3>
             <p className="mt-2 text-sm text-slate">
-              These settings apply only to the selected event. Visibility requires consent to browse or appear.
+              These settings apply only to the selected event. Consent is required to browse or appear in this
+              event's directory.
             </p>
+            {!hasSignup && (
+              <p className="mt-3 rounded-2xl border border-dashed border-ink/20 bg-white/60 px-4 py-3 text-xs text-slate">
+                Sign up for this event to unlock visibility controls.
+              </p>
+            )}
             <div className="mt-4 space-y-3 text-sm">
               <label className="flex items-center gap-3">
                 <input
                   type="checkbox"
                   checked={visibility.consent}
+                  disabled={!hasSignup}
                   onChange={(e) =>
                     setVisibility((prev) => ({
                       consent: e.target.checked,
@@ -417,7 +426,7 @@ export default function App() {
                 <input
                   type="checkbox"
                   checked={visibility.visible}
-                  disabled={!visibility.consent}
+                  disabled={!visibility.consent || !hasSignup}
                   onChange={(e) => setVisibility((prev) => ({ ...prev, visible: e.target.checked }))}
                   className="h-4 w-4 rounded border-ink/20"
                 />
@@ -426,7 +435,7 @@ export default function App() {
             </div>
             <button
               type="submit"
-              disabled={loading === 'visibility'}
+              disabled={loading === 'visibility' || !hasSignup}
               className="mt-5 w-full rounded-2xl bg-moss px-5 py-3 text-sm font-semibold text-sand shadow-lg shadow-moss/30 transition hover:-translate-y-0.5 disabled:opacity-50"
             >
               {loading === 'visibility' ? 'Saving…' : 'Save visibility'}

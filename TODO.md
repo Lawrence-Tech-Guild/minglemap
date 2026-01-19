@@ -5,7 +5,7 @@
 
 ## Now (MVP demo path)
 
-- [ ] Finalize consent language and enforce per-event visibility toggles in API and UI.
+- [x] Finalize consent language and enforce per-event visibility toggles in API and UI.
 - [ ] Ship event creation and RSVP/signup flow with tests.
 - [ ] Build attendee directory with search/filter (name, interests, intent) and access controls.
 - [ ] Add in-product feedback capture (survey/form) reachable from the demo path.

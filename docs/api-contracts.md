@@ -24,6 +24,7 @@ It is intended to guide backend and frontend work until endpoints are implemente
 
 - Consent timestamps are set by the server when the attendee opts in.
 - Signups can be created without consent, but directory visibility requires it.
+- Revoking consent automatically disables `visible_in_directory`.
 
 ## Event signup
 

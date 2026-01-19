@@ -277,6 +277,31 @@ def test_directory_visibility_requires_consent_to_be_visible() -> None:
     assert "Consent is required" in response.json()["detail"]
 
 
+def test_directory_visibility_allows_revoking_consent_and_hides_profile() -> None:
+    event = create_event()
+    profile = create_profile()
+    attendance = Attendance.objects.create(
+        event=event,
+        profile=profile,
+        consent_to_share_profile=True,
+        consent_to_share_profile_at=timezone.now(),
+        visible_in_directory=True,
+    )
+    client = APIClient()
+
+    response = client.patch(
+        f"/api/events/{event.id}/directory/visibility/",
+        {"attendance_id": attendance.id, "consent_to_share_profile": False},
+        format="json",
+    )
+
+    assert response.status_code == 200
+    attendance.refresh_from_db()
+    assert attendance.consent_to_share_profile is False
+    assert attendance.consent_to_share_profile_at is None
+    assert attendance.visible_in_directory is False
+
+
 def test_directory_visibility_rejects_mismatched_event() -> None:
     event = create_event()
     other_event = Event.objects.create(
