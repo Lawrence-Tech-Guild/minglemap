@@ -1,7 +1,7 @@
 from django.db import IntegrityError, transaction
 from django.db.models import Q
 from django.utils import timezone
-from rest_framework import filters, status, viewsets
+from rest_framework import filters, mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
@@ -28,7 +28,7 @@ class ExactMatchFilterBackend(filters.BaseFilterBackend):
         return queryset
 
 
-class EventViewSet(viewsets.ReadOnlyModelViewSet):
+class EventViewSet(mixins.CreateModelMixin, viewsets.ReadOnlyModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
     filter_backends = [ExactMatchFilterBackend]

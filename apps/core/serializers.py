@@ -4,6 +4,29 @@ from .models import Attendance, Event, Feedback, Profile
 
 
 class EventSerializer(serializers.ModelSerializer):
+    def validate(self, attrs):
+        starts_at = attrs.get("starts_at") or getattr(self.instance, "starts_at", None)
+        ends_at = attrs.get("ends_at") or getattr(self.instance, "ends_at", None)
+        if starts_at and ends_at and ends_at <= starts_at:
+            raise serializers.ValidationError(
+                {"ends_at": "Event end time must be after the start time."}
+            )
+
+        signup_opens_at = attrs.get("signup_opens_at") or getattr(
+            self.instance, "signup_opens_at", None
+        )
+        signup_closes_at = attrs.get("signup_closes_at") or getattr(
+            self.instance, "signup_closes_at", None
+        )
+        if signup_opens_at and signup_closes_at and signup_closes_at < signup_opens_at:
+            raise serializers.ValidationError(
+                {
+                    "signup_closes_at": "Signup close time must be after signup open time."
+                }
+            )
+
+        return attrs
+
     class Meta:
         model = Event
         fields = "__all__"

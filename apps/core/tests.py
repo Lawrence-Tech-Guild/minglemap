@@ -25,6 +25,72 @@ def create_profile() -> Profile:
     return Profile.objects.create(name="Ada Lovelace")
 
 
+def test_event_creation_creates_event() -> None:
+    client = APIClient()
+    starts_at = timezone.now() + timedelta(days=1)
+    ends_at = starts_at + timedelta(hours=2)
+
+    payload = {
+        "title": "Founder Meetup",
+        "starts_at": starts_at.isoformat(),
+        "ends_at": ends_at.isoformat(),
+        "location": "Brooklyn, NY",
+        "description": "Demo night for founders.",
+        "estimated_attendance": 120,
+    }
+
+    response = client.post("/api/events/", payload, format="json")
+
+    assert response.status_code == 201
+    data = response.json()
+    assert data["title"] == payload["title"]
+    assert Event.objects.filter(title="Founder Meetup").exists()
+
+
+def test_event_creation_rejects_invalid_times() -> None:
+    client = APIClient()
+    starts_at = timezone.now() + timedelta(days=1)
+    ends_at = starts_at - timedelta(hours=1)
+
+    response = client.post(
+        "/api/events/",
+        {
+            "title": "Invalid Time",
+            "starts_at": starts_at.isoformat(),
+            "ends_at": ends_at.isoformat(),
+            "location": "Remote",
+        },
+        format="json",
+    )
+
+    assert response.status_code == 400
+    assert "ends_at" in response.json()
+
+
+def test_event_creation_rejects_invalid_signup_window() -> None:
+    client = APIClient()
+    starts_at = timezone.now() + timedelta(days=1)
+    ends_at = starts_at + timedelta(hours=1)
+    signup_opens_at = starts_at + timedelta(days=2)
+    signup_closes_at = starts_at + timedelta(days=1)
+
+    response = client.post(
+        "/api/events/",
+        {
+            "title": "Invalid Signup Window",
+            "starts_at": starts_at.isoformat(),
+            "ends_at": ends_at.isoformat(),
+            "location": "Remote",
+            "signup_opens_at": signup_opens_at.isoformat(),
+            "signup_closes_at": signup_closes_at.isoformat(),
+        },
+        format="json",
+    )
+
+    assert response.status_code == 400
+    assert "signup_closes_at" in response.json()
+
+
 def test_attendance_defaults() -> None:
     event = create_event()
     profile = create_profile()

@@ -8,6 +8,9 @@ type Event = {
   starts_at: string;
   ends_at: string;
   description?: string;
+  estimated_attendance?: number | null;
+  signup_opens_at?: string | null;
+  signup_closes_at?: string | null;
 };
 
 type DirectoryEntry = {
@@ -59,6 +62,16 @@ export default function App() {
     connectionIntent: '',
     consent: false,
   });
+  const [eventForm, setEventForm] = useState({
+    title: '',
+    location: '',
+    startsAt: '',
+    endsAt: '',
+    description: '',
+    estimatedAttendance: '',
+    signupOpensAt: '',
+    signupClosesAt: '',
+  });
   const [directoryFilters, setDirectoryFilters] = useState({
     search: '',
     interests: '',
@@ -97,6 +110,58 @@ export default function App() {
   function resetMessages() {
     setToast(null);
     setError(null);
+  }
+
+  function toIsoDateTime(value: string) {
+    if (!value) return null;
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? null : date.toISOString();
+  }
+
+  async function handleCreateEvent(formEvent: FormEvent) {
+    formEvent.preventDefault();
+    resetMessages();
+    setLoading('create-event');
+    try {
+      const payload = {
+        title: eventForm.title,
+        location: eventForm.location,
+        starts_at: toIsoDateTime(eventForm.startsAt),
+        ends_at: toIsoDateTime(eventForm.endsAt),
+        description: eventForm.description || '',
+        estimated_attendance: eventForm.estimatedAttendance
+          ? Number(eventForm.estimatedAttendance)
+          : null,
+        signup_opens_at: toIsoDateTime(eventForm.signupOpensAt),
+        signup_closes_at: toIsoDateTime(eventForm.signupClosesAt),
+      };
+      const data = await fetchJson<Event>('/api/events/', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      });
+      setEvents((prev) => [data, ...prev]);
+      setSelectedEventId(data.id);
+      setAttendanceId(null);
+      setVisibility({ consent: false, visible: false });
+      setDirectoryEntries([]);
+      setDirectoryFilters({ search: '', interests: '', connectionIntent: '' });
+      setSignupForm((prev) => ({ ...prev, consent: false }));
+      setEventForm({
+        title: '',
+        location: '',
+        startsAt: '',
+        endsAt: '',
+        description: '',
+        estimatedAttendance: '',
+        signupOpensAt: '',
+        signupClosesAt: '',
+      });
+      setToast('Event created. Now invite attendees to sign up.');
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setLoading(null);
+    }
   }
 
   async function handleSignup(formEvent: FormEvent) {
@@ -248,7 +313,9 @@ export default function App() {
           </div>
           <div>
             <p className="font-display text-xl">MingleMap MVP</p>
-            <p className="text-xs text-slate">Demo path: signup → visibility → directory → feedback</p>
+            <p className="text-xs text-slate">
+              Demo path: event creation → signup → visibility → directory → feedback
+            </p>
           </div>
         </div>
         <div className="flex items-center gap-2 text-sm">
@@ -272,6 +339,85 @@ export default function App() {
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
               <p className="text-xs uppercase tracking-[0.25em] text-slate">Step 1</p>
+              <h2 className="font-display text-2xl">Create a new event</h2>
+              <p className="text-sm text-slate">
+                Capture the basics to generate an event for signups and the attendee directory.
+              </p>
+            </div>
+          </div>
+          <form onSubmit={handleCreateEvent} className="mt-4 grid gap-3 md:grid-cols-2">
+            <input
+              required
+              className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm shadow-sm"
+              placeholder="Event title"
+              value={eventForm.title}
+              onChange={(e) => setEventForm({ ...eventForm, title: e.target.value })}
+            />
+            <input
+              required
+              className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm shadow-sm"
+              placeholder="Location"
+              value={eventForm.location}
+              onChange={(e) => setEventForm({ ...eventForm, location: e.target.value })}
+            />
+            <input
+              required
+              className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm shadow-sm"
+              type="datetime-local"
+              value={eventForm.startsAt}
+              onChange={(e) => setEventForm({ ...eventForm, startsAt: e.target.value })}
+            />
+            <input
+              required
+              className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm shadow-sm"
+              type="datetime-local"
+              value={eventForm.endsAt}
+              onChange={(e) => setEventForm({ ...eventForm, endsAt: e.target.value })}
+            />
+            <input
+              className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm shadow-sm"
+              placeholder="Estimated attendance"
+              type="number"
+              min="0"
+              value={eventForm.estimatedAttendance}
+              onChange={(e) =>
+                setEventForm({ ...eventForm, estimatedAttendance: e.target.value })
+              }
+            />
+            <input
+              className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm shadow-sm"
+              placeholder="Signup opens"
+              type="datetime-local"
+              value={eventForm.signupOpensAt}
+              onChange={(e) => setEventForm({ ...eventForm, signupOpensAt: e.target.value })}
+            />
+            <input
+              className="rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm shadow-sm"
+              placeholder="Signup closes"
+              type="datetime-local"
+              value={eventForm.signupClosesAt}
+              onChange={(e) => setEventForm({ ...eventForm, signupClosesAt: e.target.value })}
+            />
+            <textarea
+              className="md:col-span-2 rounded-2xl border border-ink/10 bg-white px-4 py-3 text-sm shadow-sm"
+              placeholder="Short description"
+              value={eventForm.description}
+              onChange={(e) => setEventForm({ ...eventForm, description: e.target.value })}
+            />
+            <button
+              type="submit"
+              disabled={loading === 'create-event'}
+              className="md:col-span-2 rounded-2xl bg-ink px-5 py-3 text-sm font-semibold text-sand shadow-lg shadow-ink/20 transition hover:-translate-y-0.5 disabled:opacity-50"
+            >
+              {loading === 'create-event' ? 'Creating…' : 'Create event'}
+            </button>
+          </form>
+        </section>
+
+        <section className="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-xl">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <p className="text-xs uppercase tracking-[0.25em] text-slate">Step 2</p>
               <h2 className="font-display text-2xl">Choose an event</h2>
               <p className="text-sm text-slate">This drives signups, directory lookup, and feedback routing.</p>
             </div>
@@ -321,7 +467,7 @@ export default function App() {
             onSubmit={handleSignup}
             className="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-xl"
           >
-            <p className="text-xs uppercase tracking-[0.25em] text-slate">Step 2</p>
+            <p className="text-xs uppercase tracking-[0.25em] text-slate">Step 3</p>
             <h3 className="mt-2 font-display text-xl">Sign up with consent</h3>
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
               <input
@@ -395,7 +541,7 @@ export default function App() {
             onSubmit={handleVisibility}
             className="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-xl"
           >
-            <p className="text-xs uppercase tracking-[0.25em] text-slate">Step 3</p>
+            <p className="text-xs uppercase tracking-[0.25em] text-slate">Step 4</p>
             <h3 className="mt-2 font-display text-xl">Visibility + consent toggles</h3>
             <p className="mt-2 text-sm text-slate">
               These settings apply only to the selected event. Consent is required to browse or appear in this
@@ -446,7 +592,7 @@ export default function App() {
         <section className="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-xl">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
-              <p className="text-xs uppercase tracking-[0.25em] text-slate">Step 4</p>
+              <p className="text-xs uppercase tracking-[0.25em] text-slate">Step 5</p>
               <h3 className="font-display text-xl">Browse the directory</h3>
               <p className="text-sm text-slate">Search by name, interests, or connection intent.</p>
             </div>
@@ -502,7 +648,7 @@ export default function App() {
         </section>
 
         <section className="rounded-3xl border border-white/70 bg-white/80 p-6 shadow-xl">
-          <p className="text-xs uppercase tracking-[0.25em] text-slate">Step 5</p>
+          <p className="text-xs uppercase tracking-[0.25em] text-slate">Step 6</p>
           <h3 className="mt-2 font-display text-xl">Capture feedback from the demo</h3>
           <form onSubmit={handleFeedback} className="mt-4 grid gap-3 md:grid-cols-3">
             <input
@@ -532,7 +678,7 @@ export default function App() {
               disabled={loading === 'feedback'}
               className="md:col-span-3 rounded-2xl bg-ink px-5 py-3 text-sm font-semibold text-sand shadow-lg shadow-ink/20 transition hover:-translate-y-0.5 disabled:opacity-50"
             >
-              {loading === 'feedback' ? 'Submitting…' : 'Submit feedback'}
+      {loading === 'feedback' ? 'Submitting…' : 'Submit feedback'}
             </button>
           </form>
         </section>
