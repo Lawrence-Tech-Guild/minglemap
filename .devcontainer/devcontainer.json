@@ -15,6 +15,9 @@
   "shutdownAction": "stopCompose",
   "workspaceFolder": "/app",
   "workspaceMount": "source=${localWorkspaceFolder},target=/app,type=bind,consistency=cached",
+  "mounts": [
+    "source=codex-auth,target=/root/.codex,type=volume"
+  ],
   "overrideCommand": false,
   "postCreateCommand": "test -f requirements-dev.txt && pip install -r requirements-dev.txt || true; npm install -g @openai/codex@latest || true",
   "postStartCommand": "python manage.py migrate",
