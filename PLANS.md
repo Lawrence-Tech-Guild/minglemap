@@ -22,9 +22,11 @@ Provide a sprint-sized delivery plan that aligns the product roadmap with concre
 
 - Event creation and signup flows with consent capture.
 - Attendee profiles with per-event visibility toggles enforced in API.
+- Consent copy and API contract baselines locked before implementation starts.
 - Public event directory UI (list, detail, signup) wired to API.
 - Seed data and fixtures for the default demo event.
 - Happy-path demo script drafted.
+- Open a "Roadmap RFC" thread to collect feedback on MVP scope and risks before locking stories.
 
 ### Sprint 2: Demoable browsing + feedback loop
 
@@ -58,4 +60,5 @@ Provide a sprint-sized delivery plan that aligns the product roadmap with concre
 - Feature stories meet acceptance criteria and are covered by tests.
 - API documentation updated if endpoints change.
 - Demo path validated (happy path walkthrough documented and runnable).
+- Demo rehearsal completed; feedback captured in TODO.md/ROADMAP.md and action items assigned.
 - Open questions captured in TODO.md with owners.
