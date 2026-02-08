@@ -482,3 +482,45 @@ def test_feedback_rejects_mismatched_event_attendance() -> None:
     )
 
     assert response.status_code == 404
+
+
+def test_feedback_allows_event_level_submission_without_attendance() -> None:
+    event = create_event()
+    client = APIClient()
+
+    response = client.post(
+        f"/api/events/{event.id}/feedback/",
+        {
+            "message": "Great experience overall.",
+            "contact": "demo@example.com",
+        },
+        format="json",
+    )
+
+    assert response.status_code == 201
+    data = response.json()
+    assert data["attendance"] is None
+    assert data["event"] == event.id
+
+
+def test_feedback_rejects_rating_out_of_range() -> None:
+    event = create_event()
+    client = APIClient()
+
+    response = client.post(
+        f"/api/events/{event.id}/feedback/",
+        {"message": "Too high rating", "rating": 6},
+        format="json",
+    )
+
+    assert response.status_code == 400
+    assert "rating" in response.json()
+
+    response = client.post(
+        f"/api/events/{event.id}/feedback/",
+        {"message": "Too low rating", "rating": 0},
+        format="json",
+    )
+
+    assert response.status_code == 400
+    assert "rating" in response.json()

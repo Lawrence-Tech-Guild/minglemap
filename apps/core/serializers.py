@@ -81,6 +81,10 @@ class DirectoryEntrySerializer(serializers.ModelSerializer):
 
 
 class FeedbackSerializer(serializers.ModelSerializer):
+    rating = serializers.IntegerField(
+        min_value=1, max_value=5, required=False, allow_null=True
+    )
+
     class Meta:
         model = Feedback
         fields = [
