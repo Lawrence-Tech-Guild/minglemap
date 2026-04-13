@@ -18,7 +18,7 @@ dependencies = [
 # ── ►  Optional “extras” for contributors ◄ ──
 [project.optional-dependencies]
 test = [
-  "pytest~=8.2",
+  "pytest>=8.2,<10.0",
   "pytest-django~=4.8",
 ]
 typecheck = [

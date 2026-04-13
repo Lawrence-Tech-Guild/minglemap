@@ -9,7 +9,7 @@ flake8==7.0.0          # linter
 pre-commit==3.7.0      # runs hooks on each commit
 
 # Testing
-pytest==8.2.1
+pytest==9.0.3
 pytest-django==4.8.0   # handy if you add Django-specific tests later
 
 # CI helpers (optional but nice)
