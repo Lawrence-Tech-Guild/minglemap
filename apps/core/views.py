@@ -235,7 +235,9 @@ class EventViewSet(mixins.CreateModelMixin, viewsets.ReadOnlyModelViewSet):
             message=serializer.validated_data["message"],
             contact=serializer.validated_data.get("contact", ""),
         )
-        return Response(FeedbackSerializer(feedback).data, status=status.HTTP_201_CREATED)
+        return Response(
+            FeedbackSerializer(feedback).data, status=status.HTTP_201_CREATED
+        )
 
 
 class ProfileViewSet(viewsets.ReadOnlyModelViewSet):

@@ -21,9 +21,17 @@ test = [
   "pytest~=8.2",
   "pytest-django~=4.8",
 ]
+dev = [
+  "pytest~=8.2",
+  "pytest-django~=4.8",
+]
 typecheck = [
   "mypy~=1.10",
 ]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "minglemap.settings"
+python_files = ["tests.py", "test_*.py", "*_tests.py"]
 
 # ── Ruff configuration ──
 [tool.ruff]

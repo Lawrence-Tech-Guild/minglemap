@@ -275,7 +275,9 @@ def test_event_directory_requires_consent_and_visibility() -> None:
 
     viewer_attendance.consent_to_share_profile = True
     viewer_attendance.consent_to_share_profile_at = timezone.now()
-    viewer_attendance.save(update_fields=["consent_to_share_profile", "consent_to_share_profile_at"])
+    viewer_attendance.save(
+        update_fields=["consent_to_share_profile", "consent_to_share_profile_at"]
+    )
 
     response = client.get(
         f"/api/events/{event.id}/directory/?attendance_id={viewer_attendance.id}"
@@ -417,7 +419,9 @@ def test_event_directory_supports_search_filters() -> None:
         visible_in_directory=True,
         connection_intent="find collaborators",
     )
-    hidden_profile = Profile.objects.create(name="Hidden Person", interests="networking")
+    hidden_profile = Profile.objects.create(
+        name="Hidden Person", interests="networking"
+    )
     Attendance.objects.create(
         event=event,
         profile=hidden_profile,

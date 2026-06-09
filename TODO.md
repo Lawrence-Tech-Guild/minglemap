@@ -9,7 +9,7 @@
 - [x] Ship event creation and RSVP/signup flow with tests.
 - [x] Build attendee directory with search/filter (name, interests, intent) and access controls.
 - [x] Add in-product feedback capture (survey/form) reachable from the demo path.
-- [ ] Seed default demo event data and publish a repeatable demo script.
+- [x] Seed default demo event data and publish a repeatable demo script.
 - [ ] Add opt-in analytics for page hits and drop-off on demo flows.
 - [ ] Rehearse the demo; capture findings and action items in docs/ and TODO.md.
 

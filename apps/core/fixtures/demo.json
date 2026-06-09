@@ -1,0 +1,216 @@
+[
+  {
+    "model": "core.event",
+    "pk": 101,
+    "fields": {
+      "title": "MingleMap Demo Day",
+      "starts_at": "2026-03-20T18:00:00Z",
+      "ends_at": "2026-03-20T20:00:00Z",
+      "location": "Lawrence Tech Guild Hub",
+      "description": "Guided walkthrough for partners; includes sample attendees with varied intents.",
+      "estimated_attendance": 60,
+      "signup_opens_at": "2026-02-20T15:00:00Z",
+      "signup_closes_at": "2026-03-20T17:00:00Z"
+    }
+  },
+  {
+    "model": "core.profile",
+    "pk": 201,
+    "fields": {
+      "name": "Demo Host",
+      "company": "Lawrence Tech Guild",
+      "role": "Community lead",
+      "bio": "Runs the demo walkthrough and moderates Q&A.",
+      "interests": "community ops, privacy, onboarding"
+    }
+  },
+  {
+    "model": "core.profile",
+    "pk": 202,
+    "fields": {
+      "name": "Alex Rivera",
+      "company": "Northwind Labs",
+      "role": "Product strategist",
+      "bio": "Focuses on discovery interviews and problem framing.",
+      "interests": "product discovery, research, facilitation"
+    }
+  },
+  {
+    "model": "core.profile",
+    "pk": 203,
+    "fields": {
+      "name": "Bianca Singh",
+      "company": "Atlas UI",
+      "role": "Frontend engineer",
+      "bio": "Builds design systems and accessible experiences.",
+      "interests": "frontend systems, accessibility, design systems"
+    }
+  },
+  {
+    "model": "core.profile",
+    "pk": 204,
+    "fields": {
+      "name": "Carlos Diaz",
+      "company": "DataForge",
+      "role": "ML engineer",
+      "bio": "Owns pipelines and model evaluation for recommendations.",
+      "interests": "data pipelines, mlops, recommender systems"
+    }
+  },
+  {
+    "model": "core.profile",
+    "pk": 205,
+    "fields": {
+      "name": "Dana Kim",
+      "company": "EventFlow",
+      "role": "Operations manager",
+      "bio": "Keeps community events running smoothly.",
+      "interests": "event ops, logistics, vendor wrangling"
+    }
+  },
+  {
+    "model": "core.profile",
+    "pk": 206,
+    "fields": {
+      "name": "Evan Brooks",
+      "company": "DocuCraft",
+      "role": "Developer advocate",
+      "bio": "Creates docs and samples that unblock dev teams.",
+      "interests": "devrel, documentation, demos"
+    }
+  },
+  {
+    "model": "core.profile",
+    "pk": 207,
+    "fields": {
+      "name": "Fatima Noor",
+      "company": "PrivacyWorks",
+      "role": "Security architect",
+      "bio": "Advises on consent, auditability, and least data.",
+      "interests": "security, privacy, governance"
+    }
+  },
+  {
+    "model": "core.profile",
+    "pk": 208,
+    "fields": {
+      "name": "Gus Turner",
+      "company": "Circuit Shed",
+      "role": "Hardware tinkerer",
+      "bio": "Builds playful IoT prototypes and BLE gadgets.",
+      "interests": "iot, hardware, proximity"
+    }
+  },
+  {
+    "model": "core.attendance",
+    "pk": 301,
+    "fields": {
+      "event": 101,
+      "profile": 201,
+      "interest_areas": "hosting, facilitation",
+      "connection_intent": "find beta partners",
+      "visible_in_directory": true,
+      "consent_to_share_profile": true,
+      "consent_to_share_profile_at": "2026-02-25T16:00:00Z",
+      "signed_up_at": "2026-02-25T16:00:00Z"
+    }
+  },
+  {
+    "model": "core.attendance",
+    "pk": 302,
+    "fields": {
+      "event": 101,
+      "profile": 202,
+      "interest_areas": "user research, interview scripts",
+      "connection_intent": "compare onboarding flows",
+      "visible_in_directory": true,
+      "consent_to_share_profile": true,
+      "consent_to_share_profile_at": "2026-02-25T16:10:00Z",
+      "signed_up_at": "2026-02-25T16:10:00Z"
+    }
+  },
+  {
+    "model": "core.attendance",
+    "pk": 303,
+    "fields": {
+      "event": 101,
+      "profile": 203,
+      "interest_areas": "design system tokens",
+      "connection_intent": "pair on accessibility audit",
+      "visible_in_directory": true,
+      "consent_to_share_profile": true,
+      "consent_to_share_profile_at": "2026-02-25T16:20:00Z",
+      "signed_up_at": "2026-02-25T16:20:00Z"
+    }
+  },
+  {
+    "model": "core.attendance",
+    "pk": 304,
+    "fields": {
+      "event": 101,
+      "profile": 204,
+      "interest_areas": "ETL benchmarking",
+      "connection_intent": "find MLops collaborators",
+      "visible_in_directory": true,
+      "consent_to_share_profile": true,
+      "consent_to_share_profile_at": "2026-02-25T16:30:00Z",
+      "signed_up_at": "2026-02-25T16:30:00Z"
+    }
+  },
+  {
+    "model": "core.attendance",
+    "pk": 305,
+    "fields": {
+      "event": 101,
+      "profile": 205,
+      "interest_areas": "venue playbooks",
+      "connection_intent": "swap event ops tips",
+      "visible_in_directory": true,
+      "consent_to_share_profile": true,
+      "consent_to_share_profile_at": "2026-02-25T16:40:00Z",
+      "signed_up_at": "2026-02-25T16:40:00Z"
+    }
+  },
+  {
+    "model": "core.attendance",
+    "pk": 306,
+    "fields": {
+      "event": 101,
+      "profile": 206,
+      "interest_areas": "docs IA, sample apps",
+      "connection_intent": "collect feedback on docs",
+      "visible_in_directory": true,
+      "consent_to_share_profile": true,
+      "consent_to_share_profile_at": "2026-02-25T16:50:00Z",
+      "signed_up_at": "2026-02-25T16:50:00Z"
+    }
+  },
+  {
+    "model": "core.attendance",
+    "pk": 307,
+    "fields": {
+      "event": 101,
+      "profile": 207,
+      "interest_areas": "data minimization, consent UX",
+      "connection_intent": "stress-test privacy approach",
+      "visible_in_directory": true,
+      "consent_to_share_profile": true,
+      "consent_to_share_profile_at": "2026-02-25T17:00:00Z",
+      "signed_up_at": "2026-02-25T17:00:00Z"
+    }
+  },
+  {
+    "model": "core.attendance",
+    "pk": 308,
+    "fields": {
+      "event": 101,
+      "profile": 208,
+      "interest_areas": "BLE prototyping",
+      "connection_intent": "explore proximity ideas",
+      "visible_in_directory": false,
+      "consent_to_share_profile": true,
+      "consent_to_share_profile_at": "2026-02-25T17:10:00Z",
+      "signed_up_at": "2026-02-25T17:10:00Z"
+    }
+  }
+]
